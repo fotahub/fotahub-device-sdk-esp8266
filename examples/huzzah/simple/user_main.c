@@ -46,7 +46,7 @@ void ICACHE_FLASH_ATTR user_init(void)
   
   firmwareUpdateInfoReader_init();
   fotaUpdateWorkflow_init();
-  fotahub_init(((char *)(DEMO_PRODUCT_ID)), ((char *)(DEMO_PRODUCT_NAME)), &ESP8266_FOTA_UPDATE_CLIENT_CONFIG, 0xFAu);
+  fotahub_init(((char *)(DEMO_PRODUCT_ID)), ((char *)(DEMO_PRODUCT_NAME)), &ESP8266_FOTA_UPDATE_CLIENT_CONFIG, 0xF8u);
   
   wifiStation_connect(((char *)(WIFI_STATION_SSID)), ((char *)(WIFI_STATION_PASSWORD)));
 }

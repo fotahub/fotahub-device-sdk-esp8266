@@ -1,5 +1,5 @@
 /bin
-/examples/**/*.pem
+/examples/**/caCerts
 /examples/**/build
 /examples/**/erase.*
 /examples/**/flash.*

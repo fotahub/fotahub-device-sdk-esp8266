@@ -53,7 +53,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
 
 static char updateVersion[MAX_DEMO_FIRMWARE_UPDATE_VERSION_LENGTH + 1] = { 0 };
 
-static uint8_t *updateVerificationData[UPDATE_PARTITION_COUNT] = { NULL, NULL };
+static uint8_t *updateVerificationData[UPDATE_PARTITION_COUNT] = { 0 };
 
 static FirmwareUpdateInfoParser__data_t updateInfoParser;
 
@@ -62,10 +62,11 @@ void ICACHE_FLASH_ATTR firmwareUpdateInfoReader_init(void)
   FirmwareUpdateInfoParser__init(&updateInfoParser);
   
   size_t updateVerificationDataSize = getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM);
-  updateVerificationData[0] = ((uint8_t *)(os_malloc(updateVerificationDataSize)));
-  updateVerificationData[1] = ((uint8_t *)(os_malloc(updateVerificationDataSize)));
-  os_memset(updateVerificationData[0], 0, updateVerificationDataSize);
-  os_memset(updateVerificationData[1], 0, updateVerificationDataSize);
+  for ( int16_t __i = 0 ; __i < UPDATE_PARTITION_COUNT; __i++ )
+  {
+    updateVerificationData[__i] = ((uint8_t *)(os_malloc(updateVerificationDataSize)));
+    os_memset(updateVerificationData[__i], 0, updateVerificationDataSize);
+  }
 }
 
 void ICACHE_FLASH_ATTR firmwareUpdateInfoReader_run(void)

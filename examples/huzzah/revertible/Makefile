@@ -8,9 +8,8 @@ endif
 
 vecho = @echo
 
-TOOLS_HOME ?= /opt/xtensa-lx106-elf
+TOOLS_HOME ?= $(if $(filter Windows_NT,$(OS)),/c/msys32,)/opt/xtensa-lx106-elf
 SDK_HOME ?= /git/ESP8266_NONOS_SDK
-UTILS_HOME ?= /opt/esp8266-utils
 
 CC = $(TOOLS_HOME)/bin/xtensa-lx106-elf-gcc
 AR = $(TOOLS_HOME)/bin/xtensa-lx106-elf-ar
@@ -18,22 +17,25 @@ LD = $(TOOLS_HOME)/bin/xtensa-lx106-elf-gcc
 OBJCOPY = $(TOOLS_HOME)/bin/xtensa-lx106-elf-objcopy
 OBJDUMP = $(TOOLS_HOME)/bin/xtensa-lx106-elf-objdump
 
-MEM_ANALYZER = $(if $(filter Windows_NT,$(OS)),$(UTILS_HOME)/MemAnalyzer.exe,)
+PYTHON27 = $(if $(filter Windows_NT,$(OS)),/c/msys32/mingw32/bin/python2.7,python2.7)
 
-GEN_APPBIN = $(UTILS_HOME)/gen_appbin.$(if $(filter Windows_NT,$(OS)),exe,py)
+MEM_ANALYZER = $(if $(filter Windows_NT,$(OS)),$(SDK_HOME)/tools/MemAnalyzer,)
+
+export COMPILE = gcc
+GEN_APPBIN = $(SDK_HOME)/tools/gen_appbin.py
 
 GEN_APPBIN_BOOT_MODE = 2
 GEN_APPBIN_FLASH_MODE = 0
 GEN_APPBIN_FLASH_CLK_DIV = 0
 GEN_APPBIN_FLASH_SIZE_MAP = 2
 
-ESPTOOL = $(if $(filter Windows_NT,$(OS)),,python2.7 )$(UTILS_HOME)/esptool.$(if $(filter Windows_NT,$(OS)),exe,py)
+ESPTOOL = $(if $(filter Windows_NT,$(OS)),/c/msys32/mingw32/bin/,$(PYTHON27) )esptool.py
 ESPTOOL_COM_PORT ?= NONE
 ESPTOOL_BAUDRATE ?= 921600
 ESPTOOL_FLASH_OPTIONS = --flash_freq 40m --flash_mode qio --flash_size 8m
-ESPTOOL_BINARY_OPTIONS = 0x00000 $(SDK_BINDIR)/boot_v1.7.bin 0x01000 $(BINODIR)/$(BINARY)1.bin 0xFA000 $(BINODIR)/esp_ca_cert_$(BINARY)_letsEncryptCACert.bin 0xFB000 $(SDK_BINDIR)/blank.bin 0xFC000 $(SDK_BINDIR)/esp_init_data_default_v08.bin 0xFE000 $(SDK_BINDIR)/blank.bin
+ESPTOOL_BINARY_OPTIONS = 0x00000 $(SDK_BINDIR)/boot_v1.7.bin 0x01000 $(BINODIR)/$(BINARY)1.bin 0xF8000 $(BINODIR)/esp_$(BINARY)_caCerts.bin 0xFB000 $(SDK_BINDIR)/blank.bin 0xFC000 $(SDK_BINDIR)/esp_init_data_default_v08.bin 0xFE000 $(SDK_BINDIR)/blank.bin
 
-MAKE_CACERT ?= $(UTILS_HOME)/make_cacert.$(if $(filter Windows_NT,$(OS)),exe,py)
+MAKE_CACERT ?= $(SDK_HOME)/tools/make_cacert.py
 
 BUILDROOT ?= 
 OROOT ?= $(if $(BUILDROOT),$(BUILDROOT)/com/fotahub/devicesdks/plainc/examples/singlechip/esp8266/huzzah/revertible,build)
@@ -83,8 +85,6 @@ ALL_SRCS_DemoProduct = $(wildcard ./*.c) $(wildcard $(EXT_SRCDIR_DemoProduct_0)/
 
 ALL_OBJS_DemoProduct = $(patsubst %.c,$(OBJODIR)/%.o,$(notdir $(ALL_SRCS_DemoProduct)))
 
-CACERT_DemoProduct_letsEncryptCACert = $(PREFIX)/certs/ISRG-Root-X1.crt
-
 #  
 # End DemoProduct executable
 #  
@@ -115,6 +115,8 @@ clean:
 	$(Q) $(RM) -r $(OROOT)
 	$(if $(wildcard eagle.app.sym),$(vecho) "RM eagle.app.sym",)
 	$(Q) $(RM) -f eagle.app.sym
+	$(if $(wildcard caCerts),$(vecho) "RM caCerts",)
+	$(Q) $(RM) -r caCerts
 
 cleanDependencies: 
 	$(if $(wildcard $(FOTAHUB_SRCDIR)/Makefile),$(Q) $(MAKE) -C $(FOTAHUB_SRCDIR) clean BUILDROOT=$(BUILDROOT),)
@@ -123,7 +125,7 @@ cleanAll: clean cleanDependencies
 
 rebuild: clean all
 
-certs: $(BINODIR)/esp_ca_cert_$(BINARY)_letsEncryptCACert.bin | $(BINODIR)
+certs: $(BINODIR)/esp_$(BINARY)_caCerts.bin | $(BINODIR)
 
 flash: all
 	$(vecho) "Flashing $(BINARY)..."
@@ -136,17 +138,17 @@ erase:
 	$(vecho) "Done."
 
 genFlashCmds: Makefile
-	$(if $(wildcard $(UTILS_HOME)/gen_flash_cmds.sh),$(Q) $(UTILS_HOME)/gen_flash_cmds.sh $(if $(HOST),$(HOST),Linux) $(ESPTOOL_BAUDRATE) "$(ESPTOOL_FLASH_OPTIONS)" "$(ESPTOOL_BINARY_OPTIONS)",)
+	$(if $(wildcard $(SDK_HOME)/tools/gen_flash_cmds.sh),$(Q) $(SDK_HOME)/tools/gen_flash_cmds.sh $(if $(HOST),$(HOST),Linux) $(ESPTOOL_BAUDRATE) "$(ESPTOOL_FLASH_OPTIONS)" "$(ESPTOOL_BINARY_OPTIONS)",)
 
 $(OBJODIR): 
 	$(Q) mkdir -p $@
 
 define CompileSources
-$$(patsubst %.c,$(OBJODIR)/%.o,$$(notdir $(1))): $(1) $(ALL_INCS_DemoProduct) Makefile | $(OBJODIR)
-	$(vecho) "CC $$<"
-	$(Q) $(CC) $(CFLAGS) $(DEFINE_FLAGS) $(ALL_INCDIR_FLAGS_DemoProduct) $(SDK_INCDIR_FLAGS) -c -o $$@ $$<
+$$(patsubst %.c,$$(OBJODIR)/%.o,$$(notdir $(1))): $(1) $$(ALL_INCS_DemoProduct) Makefile | $$(OBJODIR)
+	$$(vecho) "CC $$<"
+	$$(Q) $$(CC) $$(CFLAGS) $$(DEFINE_FLAGS) $$(ALL_INCDIR_FLAGS_DemoProduct) $$(SDK_INCDIR_FLAGS) -c -o $$@ $$<
 endef
-$(foreach asrc, $(sort $(ALL_SRCS_DemoProduct)), $(eval $(call CompileSources,$(asrc))))
+$(foreach asrc,$(sort $(ALL_SRCS_DemoProduct)), $(eval $(call CompileSources,$(asrc))))
 
 $(LIBODIR): 
 	$(Q) mkdir -p $@
@@ -159,18 +161,18 @@ $(IMAGEODIR):
 	$(Q) mkdir -p $@
 
 define MakeImage
-$(IMAGEODIR)/$(BINARY)$(2).elf: $(LIBODIR)/lib$(BINARY).a $(ALL_LIBS_DemoProduct) | $(IMAGEODIR)
-	$(vecho) "LD $$(notdir $$@)"
-	$(Q) $(LD) $(1) $(LDFLAGS) -o $$@ $(ALL_LIBDIR_FLAGS_DemoProduct) $(SDK_LIBDIR_FLAGS) -Wl,--start-group $(ALL_LIB_FLAGS_DemoProduct) $(SDK_LIB_FLAGS) $$< -Wl,--end-group
-	$(vecho) "------------------------------------------------------------------------------"
-	$(vecho) "Memory Usage:"
-	$(if $(filter Windows_NT,$(OS)),$(if $(wildcard $(MEM_ANALYZER)),$(Q) $(MEM_ANALYZER) $(OBJDUMP).exe $$@ | tee $$(subst .elf,.dmp,$$@),$(vecho) "Warning: $(notdir $(MEM_ANALYZER)) not found - please clone https://github.com/Sermus/ESP8266_memory_analyzer, build it, and copy resulting executable to $(MEM_ANALYZER)."),)
-	$(vecho) "------------------------------------------------------------------------------"
-	$(Q) $(OBJDUMP) -t -j .text $$@ > $$(subst .elf,_iram.dmp,$$@)
-	$(Q) $(OBJDUMP) -t -j .irom0.text $$@ > $$(subst .elf,_spi.dmp,$$@)
-	$(Q) $(OBJDUMP) -t -j .data -j .rodata -j .bss $$@ > $$(subst .elf,_ram.dmp,$$@)
-	$(vecho) "See *.dmp files in $(IMAGEODIR) folder for detailed memory usage information."
-	$(vecho) "------------------------------------------------------------------------------"
+$$(IMAGEODIR)/$$(BINARY)$(2).elf: $$(LIBODIR)/lib$$(BINARY).a $$(ALL_LIBS_DemoProduct) | $$(IMAGEODIR)
+	$$(vecho) "LD $$(notdir $$@)"
+	$$(Q) $$(LD) $(1) $$(LDFLAGS) -o $$@ $$(ALL_LIBDIR_FLAGS_DemoProduct) $$(SDK_LIBDIR_FLAGS) -Wl,--start-group $$(ALL_LIB_FLAGS_DemoProduct) $$(SDK_LIB_FLAGS) $$< -Wl,--end-group
+	$$(vecho) "------------------------------------------------------------------------------"
+	$$(vecho) "Memory Usage:"
+	$$(if $$(filter Windows_NT,$$(OS)),$$(if $$(wildcard $$(MEM_ANALYZER)),$$(Q) $$(MEM_ANALYZER) $$(OBJDUMP).exe $$@ | tee $$(subst .elf,.dmp,$$@),$$(vecho) "Warning: $$(notdir $$(MEM_ANALYZER)) not found - please clone https://github.com/Sermus/ESP8266_memory_analyzer, build it, and copy resulting executable to $$(MEM_ANALYZER)."),)
+	$$(vecho) "------------------------------------------------------------------------------"
+	$$(Q) $$(OBJDUMP) -t -j .text $$@ > $$(subst .elf,_iram.dmp,$$@)
+	$$(Q) $$(OBJDUMP) -t -j .irom0.text $$@ > $$(subst .elf,_spi.dmp,$$@)
+	$$(Q) $$(OBJDUMP) -t -j .data -j .rodata -j .bss $$@ > $$(subst .elf,_ram.dmp,$$@)
+	$$(vecho) "See *.dmp files in $$(IMAGEODIR) folder for detailed memory usage information."
+	$$(vecho) "------------------------------------------------------------------------------"
 endef
 $(eval $(call MakeImage,$(LD_SCRIPT_FLAGS_USER1),1))
 $(eval $(call MakeImage,$(LD_SCRIPT_FLAGS_USER2),2))
@@ -179,23 +181,38 @@ $(BINODIR):
 	$(Q) mkdir -p $@
 
 define MakeBinary
-$(BINODIR)/$(BINARY)$(1).bin: $(IMAGEODIR)/$(BINARY)$(1).elf | $(BINODIR)
-	$(vecho) "FW $$(notdir $$@)"
-	$(Q) $(OBJCOPY) --only-section .text -O binary $$< eagle.app.v6.text.bin
-	$(Q) $(OBJCOPY) --only-section .data -O binary $$< eagle.app.v6.data.bin
-	$(Q) $(OBJCOPY) --only-section .rodata -O binary $$< eagle.app.v6.rodata.bin
-	$(Q) $(OBJCOPY) --only-section .irom0.text -O binary $$< eagle.app.v6.irom0text.bin
-	$(Q) $(GEN_APPBIN) $$< $(GEN_APPBIN_BOOT_MODE) $(GEN_APPBIN_FLASH_MODE) $(GEN_APPBIN_FLASH_CLK_DIV) $(GEN_APPBIN_FLASH_SIZE_MAP) $(if $(1),$(1),0)
-	$(Q) mv eagle.app.flash.bin $$@
-	$(Q) $(RM) eagle.app.v6.*.bin
-	$(if $(subst 2,,$(1)),,$(vecho) "Done.")
+$$(BINODIR)/$$(BINARY)$(1).bin: $$(IMAGEODIR)/$$(BINARY)$(1).elf | $$(BINODIR)
+	$$(vecho) "FW $$(notdir $$@)"
+	$$(Q) $$(OBJCOPY) --only-section .text -O binary $$< eagle.app.v6.text.bin
+	$$(Q) $$(OBJCOPY) --only-section .data -O binary $$< eagle.app.v6.data.bin
+	$$(Q) $$(OBJCOPY) --only-section .rodata -O binary $$< eagle.app.v6.rodata.bin
+	$$(Q) $$(OBJCOPY) --only-section .irom0.text -O binary $$< eagle.app.v6.irom0text.bin
+	$$(Q) $$(PYTHON27) $$(GEN_APPBIN) $$< $$(GEN_APPBIN_BOOT_MODE) $$(GEN_APPBIN_FLASH_MODE) $$(GEN_APPBIN_FLASH_CLK_DIV) $$(GEN_APPBIN_FLASH_SIZE_MAP) $(if $(1),$(1),0)
+	$$(Q) mv eagle.app.flash.bin $$@
+	$$(Q) $$(RM) eagle.app.v6.*.bin
+	$(if $(subst 2,,$(1)),,$$(vecho) "Done.")
 endef
 $(eval $(call MakeBinary,1))
 $(eval $(call MakeBinary,2))
 
-$(BINODIR)/esp_ca_cert_$(BINARY)_letsEncryptCACert.bin: 
-	$(vecho) "FW $(notdir $@)"
-	$(Q) $(if $(filter Windows_NT,$(OS)),,python2.7 )$(MAKE_CACERT) $(CACERT_$(BINARY)_letsEncryptCACert)
-	$(Q) mv esp_ca_cert.bin $@
-	$(vecho) "Done."
+define CreateCertDir
+$(1): 
+	$$(Q) mkdir -p $$@
+endef
+$(eval $(call CreateCertDir,caCerts))
 
+define DownloadCert
+$(2)/$(3): | $(2)
+	$$(vecho) "DL $$(notdir $$@)"
+	$$(Q) wget $$(if $$(V),,-q )-O $$@ $(1)
+endef
+$(eval $(call DownloadCert,https://letsencrypt.org/certs/isrgrootx1.pem,caCerts,isrgrootx1.cer))
+
+define MakeCertBinary
+$$(BINODIR)/esp_$$(BINARY)_$(1).bin: $$(patsubst %,$(1)/%,$(2)) Makefile | $$(BINODIR)
+	$$(vecho) "FW $$(notdir $$@)"
+	$$(Q) cd $$(dir $$<) && $$(PYTHON27) $$(MAKE_CACERT) && cd $$(abspath $$(dir $$(firstword $$(MAKEFILE_LIST))))
+	$$(Q) mv $$(dir $$<)esp_ca_cert.bin $$@
+	$$(vecho) "Done."
+endef
+$(eval $(call MakeCertBinary,caCerts,isrgrootx1.cer))

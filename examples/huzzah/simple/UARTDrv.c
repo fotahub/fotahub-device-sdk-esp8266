@@ -61,7 +61,7 @@ static void ICACHE_FLASH_ATTR uart_recvTask(os_event_t *pEvent)
      * while system_os_post-ed invocation of this runnable was underway but have been
      * handled by fully reading out RX FIFO right here
      */
-    WRITE_PERI_REG(UART_INT_CLR(uartUnit),UART_RXFIFO_FULL_INT_CLR | UART_RXFIFO_TOUT_INT_CLR);
+    WRITE_PERI_REG(UART_INT_CLR(uartUnit), UART_RXFIFO_FULL_INT_CLR | UART_RXFIFO_TOUT_INT_CLR);
     
     /* 
      * Re-enable RX interrupt requests

@@ -27,8 +27,8 @@ static os_timer_t hTimer;
 void ICACHE_FLASH_ATTR userLoop_init(void)
 {
   os_timer_disarm(&hTimer);
-  os_timer_setfn(&hTimer,&osTimerCallback,NULL);
-  os_timer_arm(&hTimer,USER_LOOP_INTERVAL,true);
+  os_timer_setfn(&hTimer, &osTimerCallback, NULL);
+  os_timer_arm(&hTimer, USER_LOOP_INTERVAL, true);
 }
 
 static void ICACHE_FLASH_ATTR osTimerCallback(void *pArg)
