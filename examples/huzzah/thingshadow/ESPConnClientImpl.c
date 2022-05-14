@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -367,7 +367,7 @@ void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(const void* h
   if (hSession == NULL) 
   {
     os_printf("Session handle must not be null\n");
-    (*___cid->datagramPool__ops->delete)(pDatagram, ___cid->datagramPool__ops->__instance);
+    (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);
     return;
   }
   struct espconn *pConn = ((struct espconn *) hSession);
@@ -408,7 +408,7 @@ void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(const void* h
    * TODO Store send datagram in ESPConnReverseData and perform subsequent step in runnable invoked from sent callback rather than right here
    * TODO Raise appropriate (overrun) error in case that there already is another send datagram present in ESPConnReverseDatannection
    */
-  (*___cid->datagramPool__ops->delete)(pDatagram, ___cid->datagramPool__ops->__instance);
+  (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);
 }
 
 void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(const void* hSession, void *___id)
@@ -526,5 +526,5 @@ Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_resizeDatagram(cons
 void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_deleteDatagram(const void* hSession, Datagram_t *pDatagram, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
-  (*___cid->datagramPool__ops->delete)(pDatagram, ___cid->datagramPool__ops->__instance);
+  (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);
 }

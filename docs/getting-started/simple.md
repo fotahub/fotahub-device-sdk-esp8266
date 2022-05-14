@@ -73,7 +73,7 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.0";
 
 4. Open the integrated terminal (`Terminal > New Terminal`) and build the example by running `make`.
     
-    When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat` or `mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
+    When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat`/`mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
    
 **Windows:**   
 ```bat

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-const void* ICACHE_FLASH_ATTR AWSIoTMQTTThingShadowImpl_thingShadow_connect(AWSIoTConnectionParameters_t *pConnParams, void *pUserData, void *___id)
+const void* ICACHE_FLASH_ATTR AWSIoTMQTTThingShadowImpl_thingShadow_connect(IoTConnectionParameters_t *pConnParams, void *pUserData, void *___id)
 {
   AWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   if (pConnParams == NULL) 
@@ -44,10 +44,10 @@ const void* ICACHE_FLASH_ATTR AWSIoTMQTTThingShadowImpl_thingShadow_connect(AWSI
   
   if (mqttConnParams->clientID == NULL) 
   {
-    mqttConnParams->clientID = pSessionData->pConnectionParams->thingName;
+    mqttConnParams->clientID = pSessionData->pConnectionParams->deviceName;
   }
   else if (os_strlen(mqttConnParams->clientID) == 0) {
-    mqttConnParams->clientID = pSessionData->pConnectionParams->thingName;
+    mqttConnParams->clientID = pSessionData->pConnectionParams->deviceName;
   }
   pSessionData->hDownstreamSession = (*___cid->baseComponentData.mqttClient__ops->connect)(mqttConnParams, pSessionData, ___cid->baseComponentData.mqttClient__ops->__instance);
   

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ extern AWSIoTThingShadowGateImpl__cdata_t awsIoTThingShadowInstances_thingShadow
 
 extern IConnectionMonitorHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_connectionMonitorHandler__ops;
 
-extern IAWSIoTThingShadowHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops;
+extern IIoTClientHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops;
 
 extern IFOTAUpdateStatusHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_fotaUpdateStatusHandler__ops;
 
@@ -58,7 +58,7 @@ extern IRunnable__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShado
  */
 extern AWSIoTMQTTThingShadowImpl__cdata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst__instance;
 
-extern IAWSIoTThingShadow__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops;
+extern IIoTClient__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops;
 
 extern IMQTTClientHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_mqttClientHandler__ops;
 

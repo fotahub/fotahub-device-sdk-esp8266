@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -16,10 +16,6 @@
  *  This file is part of the FotaHub(R) Device SDK program (https://fotahub.com)
  */
 #include "AWSIoTDefinitions.h"
-
-/* 
- * we should take into consideration the maximum keep alive time (1200s - 30s)
- */
 
 ICACHE_RODATA_ATTR
 char const AWS_HEADER_SECURITY_TOKEN[] = "X-Amz-Security-Token";

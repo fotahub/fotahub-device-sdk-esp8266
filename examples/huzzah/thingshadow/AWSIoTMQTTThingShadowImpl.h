@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ struct AWSIoTMQTTThingShadowImpl__cdata {
 };
 typedef struct AWSIoTMQTTThingShadowImpl__cdata AWSIoTMQTTThingShadowImpl__cdata_t;
 
-const void* ICACHE_FLASH_ATTR AWSIoTMQTTThingShadowImpl_thingShadow_connect(AWSIoTConnectionParameters_t *pConnParams, void *pUserData, void *___id);
+const void* ICACHE_FLASH_ATTR AWSIoTMQTTThingShadowImpl_thingShadow_connect(IoTConnectionParameters_t *pConnParams, void *pUserData, void *___id);
 
 #ifdef __cplusplus
 } /* extern "C" */

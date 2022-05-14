@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ AWSIoTThingShadowGateImpl__cdata_t awsIoTThingShadowInstances_thingShadowStack_t
 
 IConnectionMonitorHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_connectionMonitorHandler__ops = { 0 };
 
-IAWSIoTThingShadowHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops = { 0 };
+IIoTClientHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops = { 0 };
 
 IFOTAUpdateStatusHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_fotaUpdateStatusHandler__ops = { 0 };
 
@@ -64,7 +64,7 @@ IRunnable__idata_t awsIoTThingShadowInstances_thingShadowStack_thingShadowGateIn
  */
 AWSIoTMQTTThingShadowImpl__cdata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst__instance = { 0 };
 
-IAWSIoTThingShadow__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops = { 0 };
+IIoTClient__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops = { 0 };
 
 IMQTTClientHandler__idata_t awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_mqttClientHandler__ops = { 0 };
 
@@ -179,7 +179,7 @@ static inline void ICACHE_FLASH_ATTR awsIoTThingShadowInstances_thingShadowStack
   /* 
    * prov port
    */
-  awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops.delta = &AWSIoTThingShadowGateImpl_thingShadowHandler_delta;
+  awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops.desired = &AWSIoTThingShadowGateImpl_thingShadowHandler_desired;
   /* 
    * prov port
    */
@@ -256,7 +256,7 @@ static inline void ICACHE_FLASH_ATTR awsIoTThingShadowInstances_thingShadowStack
   /* 
    * prov port
    */
-  awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops.update = &AbstractAWSIoTMQTTThingShadowImpl_thingShadow_update;
+  awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst_thingShadow__ops.report = &AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report;
   /* 
    * prov port
    */
@@ -312,7 +312,7 @@ static inline void ICACHE_FLASH_ATTR awsIoTThingShadowInstances_thingShadowStack
   /* 
    * required port ops
    */
-  awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst__instance.baseComponentData.awsIoTThingShadowHandlers__ops[0] = &awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops;
+  awsIoTThingShadowInstances_thingShadowStack_awsIoTMQTTThingShadowInst__instance.baseComponentData.thingShadowHandlers__ops[0] = &awsIoTThingShadowInstances_thingShadowStack_thingShadowGateInst_thingShadowHandler__ops;
   
   /* 
    * implements
@@ -517,7 +517,7 @@ static inline void ICACHE_FLASH_ATTR awsIoTThingShadowInstances_thingShadowStack
   /* 
    * prov port
    */
-  awsIoTThingShadowInstances_thingShadowStack_datagramPoolInst_datagramPool__ops.delete = &DynamicDatagramPoolImpl_datagramPool_delete;
+  awsIoTThingShadowInstances_thingShadowStack_datagramPoolInst_datagramPool__ops.deleteDatagram = &DynamicDatagramPoolImpl_datagramPool_deleteDatagram;
   /* 
    * prov port owning instance
    */

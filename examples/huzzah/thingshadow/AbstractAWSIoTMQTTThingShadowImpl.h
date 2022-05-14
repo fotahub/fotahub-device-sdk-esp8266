@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 #include <c_types.h>
 #include <osapi.h>
 #include "Timer.h"
-#include "AWSIoT.h"
+#include "IoT.h"
 #include "MQTT.h"
 #include "AWSIoTDefinitions.h"
 #include "AWSCredentialsDefinitions.h"
@@ -40,8 +40,8 @@ struct AWSIoTSessionData {
   const void* hDownstreamSession;
   void *pUserData;
   Datagram_t *pPublishMessage;
-  AWSIoTThingShadowAction_t action;
-  AWSIoTConnectionParameters_t *pConnectionParams;
+  IoTAction_t action;
+  IoTConnectionParameters_t *pConnectionParams;
 };
 typedef struct AWSIoTSessionData AWSIoTSessionData_t;
 
@@ -53,7 +53,7 @@ struct AbstractAWSIoTMQTTThingShadowImpl__cdata {
   /* 
    * Req port ops
    */
-  IAWSIoTThingShadowHandler__idata_t *awsIoTThingShadowHandlers__ops[MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT];
+  IIoTClientHandler__idata_t *thingShadowHandlers__ops[MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT];
   /* 
    * Req port ops
    */
@@ -65,7 +65,7 @@ struct AbstractAWSIoTMQTTThingShadowImpl__cdata {
   /* 
    * Abstract runnables
    */
-  const void* ((*(thingShadow_connect__abstract))(AWSIoTConnectionParameters_t *,void *,void *));
+  const void* ((*(thingShadow_connect__abstract))(IoTConnectionParameters_t *,void *,void *));
 };
 typedef struct AbstractAWSIoTMQTTThingShadowImpl__cdata AbstractAWSIoTMQTTThingShadowImpl__cdata_t;
 
@@ -75,7 +75,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_isAWSIoTDataDeleted(AWS
 
 void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_deleteAWSIoTData(AWSIoTSessionData_t *pSessionData, void *___id);
 
-bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_update(const void* hSession, char *jsonString, void *___id);
+bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report(const void* hSession, char *jsonString, void *___id);
 
 bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const void* hSession, void *___id);
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ AWSIoTSessionData_t *ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_newAWSI
       ___cid->awsIoTRequests__field[__i].pUserData = NULL;
       ___cid->awsIoTRequests__field[__i].pPublishMessage = NULL;
       ___cid->awsIoTRequests__field[__i].pConnectionParams = NULL;
-      ___cid->awsIoTRequests__field[__i].action = AWS_IOT_THING_SHADOW_ACTION_INTERNAL;
+      ___cid->awsIoTRequests__field[__i].action = IOT_ACTION_INTERNAL;
       return &___cid->awsIoTRequests__field[__i];
     }
   }
@@ -65,7 +65,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_deleteAWSIoTData(AWSIoT
   pSessionData->busy = false;
 }
 
-bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_update(const void* hSession, char *jsonString, void *___id)
+bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report(const void* hSession, char *jsonString, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -89,20 +89,19 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_update(cons
   }
   os_memcpy(((char *)(mqttPublishMessage->pVisiblePayload)), jsonString, os_strlen(jsonString));
   
-  pSessionData->action = AWS_IOT_THING_SHADOW_ACTION_UPDATE;
+  pSessionData->action = IOT_ACTION_REPORT;
   char updateTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
-  buildAWSIoTThingShadowTopicName(updateTopicName, pSessionData->pConnectionParams->thingName, pSessionData->action, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_NONE);
+  buildAWSIoTThingShadowTopicName(updateTopicName, pSessionData->pConnectionParams->deviceName, pSessionData->action, IOT_SUBTOPIC_KIND_NONE);
   
   MQTTPublishParameters_t mqttPubParams = 
   {
-    .qos = ((pSessionData->pConnectionParams->qos == AWS_IOT_QOS_0)) ? (MQTT_QOS_0) : (MQTT_QOS_1), 
+    .qos = ((pSessionData->pConnectionParams->qos == IOT_QOS_0)) ? (MQTT_QOS_0) : (MQTT_QOS_1), 
     .isRetained = false, 
     .isDuplicatedMsg = false
   };
-  
   if (!(*___cid->mqttClient__ops->sendPublishMessage)(pSessionData->hDownstreamSession, updateTopicName, mqttPublishMessage, &mqttPubParams, ___cid->mqttClient__ops->__instance)) 
   {
-    (*___cid->mqttClient__ops->deleteDatagram)(pSessionData->hDownstreamSession, mqttPublishMessage, ___cid->mqttClient__ops->__instance);
+    (*___cid->mqttClient__ops->deleteDatagram)(pSessionData, mqttPublishMessage, ___cid->mqttClient__ops->__instance);
     return false;
   }
   if (___cid->timeoutTimer__ops != NULL) 
@@ -126,7 +125,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const v
     return false;
   }
   
-  pSessionData->action = AWS_IOT_THING_SHADOW_ACTION_GET;
+  pSessionData->action = IOT_ACTION_GET;
   
   Datagram_t *mqttPublishMessage = (*___cid->mqttClient__ops->newPublishMessage)(pSessionData, 0, ___cid->mqttClient__ops->__instance);
   if (mqttPublishMessage == NULL) 
@@ -135,7 +134,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const v
   }
   
   char getTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
-  buildAWSIoTThingShadowTopicName(getTopicName, pSessionData->pConnectionParams->thingName, pSessionData->action, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_NONE);
+  buildAWSIoTThingShadowTopicName(getTopicName, pSessionData->pConnectionParams->deviceName, pSessionData->action, IOT_SUBTOPIC_KIND_NONE);
   
   MQTTPublishParameters_t mqttPubParams = 
   {
@@ -143,8 +142,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const v
     .isRetained = false, 
     .isDuplicatedMsg = false
   };
-  
-  if (!(*___cid->mqttClient__ops->sendPublishMessage)(pSessionData, getTopicName, mqttPublishMessage, &mqttPubParams, ___cid->mqttClient__ops->__instance)) 
+  if (!(*___cid->mqttClient__ops->sendPublishMessage)(pSessionData, "$iothub/twin/GET/?$rid=get_twin", mqttPublishMessage, &mqttPubParams, ___cid->mqttClient__ops->__instance)) 
   {
     (*___cid->mqttClient__ops->deleteDatagram)(pSessionData, mqttPublishMessage, ___cid->mqttClient__ops->__instance);
     return false;
@@ -208,11 +206,11 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
   char getAcceptedTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
   char getRejectedTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
   
-  buildAWSIoTThingShadowTopicName(updateAcceptedTopicName, pSessionData->pConnectionParams->thingName, AWS_IOT_THING_SHADOW_ACTION_UPDATE, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_ACCEPTED);
-  buildAWSIoTThingShadowTopicName(updateRejectedTopicName, pSessionData->pConnectionParams->thingName, AWS_IOT_THING_SHADOW_ACTION_UPDATE, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_REJECTED);
-  buildAWSIoTThingShadowTopicName(updateDeltaTopicName, pSessionData->pConnectionParams->thingName, AWS_IOT_THING_SHADOW_ACTION_UPDATE, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_DELTA);
-  buildAWSIoTThingShadowTopicName(getAcceptedTopicName, pSessionData->pConnectionParams->thingName, AWS_IOT_THING_SHADOW_ACTION_GET, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_ACCEPTED);
-  buildAWSIoTThingShadowTopicName(getRejectedTopicName, pSessionData->pConnectionParams->thingName, AWS_IOT_THING_SHADOW_ACTION_GET, AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_REJECTED);
+  buildAWSIoTThingShadowTopicName(updateAcceptedTopicName, pSessionData->pConnectionParams->deviceName, IOT_ACTION_REPORT, IOT_SUBTOPIC_KIND_ACCEPTED);
+  buildAWSIoTThingShadowTopicName(updateRejectedTopicName, pSessionData->pConnectionParams->deviceName, IOT_ACTION_REPORT, IOT_SUBTOPIC_KIND_REJECTED);
+  buildAWSIoTThingShadowTopicName(updateDeltaTopicName, pSessionData->pConnectionParams->deviceName, IOT_ACTION_REPORT, IOT_SUBTOPIC_KIND_DELTA);
+  buildAWSIoTThingShadowTopicName(getAcceptedTopicName, pSessionData->pConnectionParams->deviceName, IOT_ACTION_GET, IOT_SUBTOPIC_KIND_ACCEPTED);
+  buildAWSIoTThingShadowTopicName(getRejectedTopicName, pSessionData->pConnectionParams->deviceName, IOT_ACTION_GET, IOT_SUBTOPIC_KIND_REJECTED);
   char *topicList[AWS_IOT_THING_SHADOW_SUBTOPICS_COUNT] = { updateDeltaTopicName, updateAcceptedTopicName, updateRejectedTopicName, getAcceptedTopicName, getRejectedTopicName };
   
   MQTTQoS_t qosList[AWS_IOT_THING_SHADOW_SUBTOPICS_COUNT] = { MQTT_QOS_0, MQTT_QOS_0, MQTT_QOS_0, MQTT_QOS_0, MQTT_QOS_0 };
@@ -221,9 +219,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connectionError)(pSessionData, AWS_IOT_ERROR_MQTT_THING_SHADOW_TOPIC_SUBSCRIPTION, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->connectionError)(pSessionData, IOT_ERROR_MQTT_TOPIC_SUBSCRIPTION, ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
   }
@@ -242,12 +240,11 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_subsc
   {
     if (grantedQoS[__i] == MQTT_QOS_FAILURE) 
     {
-      os_printf("Failed to subsbcribe to MQTT topic with id %d\n", __i);
       for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
       {
-        if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+        if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
         {
-          (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connectionError)(pSessionData, AWS_IOT_ERROR_MQTT_THING_SHADOW_TOPIC_SUBSCRIPTION, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+          (*___cid->thingShadowHandlers__ops[___pc]->connectionError)(pSessionData, IOT_ERROR_MQTT_TOPIC_SUBSCRIPTION, ___cid->thingShadowHandlers__ops[___pc]->__instance);
         }
       }
       return;
@@ -255,9 +252,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_subsc
   }
   for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
   {
-    if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+    if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
     {
-      (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connected)(pSessionData, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+      (*___cid->thingShadowHandlers__ops[___pc]->connected)(pSessionData, ___cid->thingShadowHandlers__ops[___pc]->__instance);
     }
   }
 }
@@ -284,28 +281,28 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_publi
     (*___cid->timeoutTimer__ops->cancel)(___cid->timeoutTimer__ops->__instance);
   }
   
-  AWSIoTThingShadowAction_t thingShadowAction = getAWSIoTThingShadowActionfromTopicName(topicName, topicNameLen);
-  AWSIoTThingShadowSubTopicKind_t thingShadowSubTopic = getAWSIoTThingShadowSubTopicfromTopicName(topicName, topicNameLen);
+  IoTAction_t thingShadowAction = getAWSIoTThingShadowActionfromTopicName(topicName, topicNameLen);
+  IoTSubTopicKind_t thingShadowSubTopic = getAWSIoTThingShadowSubTopicfromTopicName(topicName, topicNameLen);
   
-  if ((thingShadowAction == AWS_IOT_THING_SHADOW_ACTION_INTERNAL) || (thingShadowSubTopic == AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_NONE)) 
+  if ((thingShadowAction == IOT_ACTION_INTERNAL) || (thingShadowSubTopic == IOT_SUBTOPIC_KIND_NONE)) 
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connectionError)(pSessionData, AWS_IOT_ERROR_MQTT_THING_SHADOW_TOPIC_SUBSCRIPTION, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->connectionError)(pSessionData, IOT_ERROR_MQTT_TOPIC_SUBSCRIPTION, ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
     return;
   }
   
-  if (thingShadowSubTopic == AWS_IOT_THING_SHADOW_SUBTOPIC_KIND_DELTA) 
+  if (thingShadowSubTopic == IOT_SUBTOPIC_KIND_DELTA) 
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->delta)(pSessionData, pSessionData->pConnectionParams->thingName, ((char *)(pDatagram->pVisiblePayload)), ((uint32_t)(pDatagram->visiblePayloadLength)), ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->desired)(pSessionData, pSessionData->pConnectionParams->deviceName, ((char *)(pDatagram->pVisiblePayload)), ((uint32_t)(pDatagram->visiblePayloadLength)), ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
   }
@@ -313,9 +310,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_publi
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->status)(pSessionData, pSessionData->pConnectionParams->thingName, thingShadowAction, subTopicToAWSIoTThingShadowAckStatus(thingShadowSubTopic), ((char *)(pDatagram->pVisiblePayload)), pDatagram->visiblePayloadLength, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->status)(pSessionData, pSessionData->pConnectionParams->deviceName, thingShadowAction, subTopicToAWSIoTThingShadowAckStatus(thingShadowSubTopic), ((char *)(pDatagram->pVisiblePayload)), pDatagram->visiblePayloadLength, ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
   }
@@ -331,9 +328,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_disco
   }
   for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
   {
-    if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+    if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
     {
-      (*___cid->awsIoTThingShadowHandlers__ops[___pc]->disconnected)(pSessionData, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+      (*___cid->thingShadowHandlers__ops[___pc]->disconnected)(pSessionData, ___cid->thingShadowHandlers__ops[___pc]->__instance);
     }
   }
   AbstractAWSIoTMQTTThingShadowImpl_deleteAWSIoTData(pSessionData, ___cid);
@@ -357,9 +354,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connectionError)(pSessionData, AWS_IOT_ERROR_NET_CONNECT_FAILED, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->connectionError)(pSessionData, IOT_ERROR_NET_CONNECT_FAILED, ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
   }
@@ -367,9 +364,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
   {
     for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
     {
-      if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+      if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
       {
-        (*___cid->awsIoTThingShadowHandlers__ops[___pc]->connectionError)(pSessionData, AWS_IOT_ERROR_MQTT_CONNECTION, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+        (*___cid->thingShadowHandlers__ops[___pc]->connectionError)(pSessionData, IOT_ERROR_MQTT_CONNECTION, ___cid->thingShadowHandlers__ops[___pc]->__instance);
       }
     }
   }
@@ -393,9 +390,9 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_timeoutHandler_expired(
     {
       for ( uint8_t ___pc = 0 ; ___pc < MAX_AWS_IOT_THING_SHADOW_HANDLER_COUNT; ___pc++ )
       {
-        if (___cid->awsIoTThingShadowHandlers__ops[___pc] != NULL && ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance != NULL) 
+        if (___cid->thingShadowHandlers__ops[___pc] != NULL && ___cid->thingShadowHandlers__ops[___pc]->__instance != NULL) 
         {
-          (*___cid->awsIoTThingShadowHandlers__ops[___pc]->status)(&___cid->awsIoTRequests__field[__i], ___cid->awsIoTRequests__field[__i].pConnectionParams->thingName, ___cid->awsIoTRequests__field[__i].action, AWS_IOT_THING_SHADOW_ACK_STATUS_TIMEOUT, NULL, 0, ___cid->awsIoTThingShadowHandlers__ops[___pc]->__instance);
+          (*___cid->thingShadowHandlers__ops[___pc]->status)(&___cid->awsIoTRequests__field[__i], ___cid->awsIoTRequests__field[__i].pConnectionParams->deviceName, ___cid->awsIoTRequests__field[__i].action, IOT_RESPONSE_STATUS_TIMEOUT, NULL, 0, ___cid->thingShadowHandlers__ops[___pc]->__instance);
         }
       }
     }

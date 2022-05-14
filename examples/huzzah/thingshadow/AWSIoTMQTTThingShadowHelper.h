@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -30,19 +30,17 @@
 extern "C" {
 #endif
 
-void ICACHE_FLASH_ATTR buildAWSIoTThingShadowTopicName(char *topicName, char const *thingName, AWSIoTThingShadowAction_t action, AWSIoTThingShadowSubTopicKind_t subTopicKind);
+void ICACHE_FLASH_ATTR buildAWSIoTThingShadowTopicName(char *topicName, char const *thingName, IoTAction_t action, IoTSubTopicKind_t subTopicKind);
 
-AWSIoTThingShadowAction_t ICACHE_FLASH_ATTR getAWSIoTThingShadowActionfromTopicName(char *topicName, size_t topicNameLen);
+IoTAction_t ICACHE_FLASH_ATTR getAWSIoTThingShadowActionfromTopicName(char *topicName, size_t topicNameLen);
 
-AWSIoTThingShadowSubTopicKind_t ICACHE_FLASH_ATTR getAWSIoTThingShadowSubTopicfromTopicName(char *topicName, size_t topicNameLen);
+IoTSubTopicKind_t ICACHE_FLASH_ATTR getAWSIoTThingShadowSubTopicfromTopicName(char *topicName, size_t topicNameLen);
 
-AWSIoTThingShadowAckStatus_t ICACHE_FLASH_ATTR subTopicToAWSIoTThingShadowAckStatus(AWSIoTThingShadowSubTopicKind_t subTopic);
+IoTResponseStatus_t ICACHE_FLASH_ATTR subTopicToAWSIoTThingShadowAckStatus(IoTSubTopicKind_t subTopic);
 
-AWSIoTError_t ICACHE_FLASH_ATTR mqttToAWSIoTError(MQTTError_t mqttError);
+char *ICACHE_FLASH_ATTR awsIoTThingShadowActionToString(IoTAction_t action);
 
-char *ICACHE_FLASH_ATTR awsIoTThingShadowActionToString(AWSIoTThingShadowAction_t action);
-
-char *ICACHE_FLASH_ATTR awsIoTThingShadowAckStatusToString(AWSIoTThingShadowAckStatus_t status);
+char *ICACHE_FLASH_ATTR awsIoTThingShadowAckStatusToString(IoTResponseStatus_t status);
 
 #ifdef __cplusplus
 } /* extern "C" */

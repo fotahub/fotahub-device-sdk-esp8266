@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020-2021 FotaHub Inc. All rights reserved.
+ *  Copyright (C) 2022 FotaHub Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -18,10 +18,6 @@
 #include "user_pre_init_default.h"
 
 #include <user_interface.h>
-
-/* 
- * partitionTable is initialized to 32m-c1 (1024KB + 1024KB)
- */
 
 static void ICACHE_FLASH_ATTR initPartitionTable(enum flash_size_map flashSizeMap);
 

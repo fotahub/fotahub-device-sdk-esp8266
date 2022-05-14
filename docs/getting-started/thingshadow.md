@@ -1,6 +1,6 @@
 # AWS IoT Thing Shadow-driven FOTA update example
 
-The *Thing Shadow* example demonstrates a real-world firmware over-the-air update procedure using the AWS IoT Thing Shadow (aka Device Shadow) service. The thing shadow is used to trigger firmware over-the-air updates on the device it represents through the cloud. Thanks to that, the device itself can be located in any place where Wi-Fi and Internet are available and does no longer need to be connected to a USB port of your laptop or computer as with the [Simple](simple.md) and [Revertible](revertible.md) examples. The thing shadow example also detects misbehaving firmware updates and reverts them to the previous version.
+The *Thing Shadow* example demonstrates a real-world firmware over-the-air update procedure using the AWS IoT Thing Shadow (aka Device Shadow) service. The thing shadow is used to trigger firmware over-the-air updates on the device it represents through the cloud. Thanks to that, the device itself can be located in any place where Wi-Fi and Internet are available and does no longer need to be connected to a USB port of your laptop or computer as with the [Simple](simple.md) and [Rollbackable](rollbackable.md) examples. The thing shadow example also detects misbehaving firmware updates and rolls them back to the previous version.
 
 ## Technical context
 
@@ -44,7 +44,7 @@ The downloaded firmware binary is stored in the device's flash memory using the 
 
 After the restart, the device starts executing the new firmware version downloaded from FotaHub. To be sure that it behaves as expeced, a built-in self test procedure is launched. Only when the latter completes successfully, the new firmware version is confirmed and becomes definite. In the opposite case, the previous firmware version is restored.
 
-For obvious reasons, the ultimately required self test logic depends heavily on the nature of the underlying IoT application and device. The thing shadow example therefore implements only a very simple self test stub which returns a positive or negative result on a pseudo-random basis (see [DemoFOTAUpdateSelfTest.c](../../examples/huzzah/thingshadow/DemoFOTAUpdateSelfTest.c) for details). Consequently, the firmware update carried out in this example may succeed and remain in place or fail and be reverted to the previous version depending on how it goes. To see both scenarios happening, just run the same example multiple times. You can also force either of them by setting the `SIMULATED_ACTIVATION_SUCCESS_RATE` constant in [DemoFOTAUpdateSelfTest.h](../../examples/huzzah/thingshadow/DemoFOTAUpdateSelfTest.h) to `100` or `0`.
+For obvious reasons, the ultimately required self test logic depends heavily on the nature of the underlying IoT application and device. The thing shadow example therefore implements only a very simple self test stub which returns a positive or negative result on a pseudo-random basis (see [DemoFOTAUpdateSelfTest.c](../../examples/huzzah/thingshadow/DemoFOTAUpdateSelfTest.c) for details). Consequently, the firmware update carried out in this example may succeed and remain in place or fail and be rolled back to the previous version depending on how it goes. To see both scenarios happening, just run the same example multiple times. You can also force either of them by setting the `SIMULATED_ACTIVATION_SUCCESS_RATE` constant in [DemoFOTAUpdateSelfTest.h](../../examples/huzzah/thingshadow/DemoFOTAUpdateSelfTest.h) to `100` or `0`.
 
 ## Supported targets
 
@@ -135,7 +135,7 @@ AWSIoTConnectionParameters_t awsIoTConnParams =
 
 1. Open the integrated terminal (`Terminal > New Terminal`) and build the example by running `make`.
     
-    When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat` or `mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
+    When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat`/`mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
    
 **Windows:**   
 ```bat
