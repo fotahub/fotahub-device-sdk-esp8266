@@ -28,21 +28,21 @@ A description of the SDKs and tools that must be available on your laptop or com
 
 ## Usage
 
+### Create a FotaHub product
+
+Create a FotaHub product that represents your board in FotaHub as explained [here](../fotahub/create-product.md). It will be used to upload and provide firmware updates for the same. 
+
 ### Get the FotaHub Device SDK for ESP8266
 
 If not yet done so, either clone or download and uncompress the [FotaHub Device SDK for ESP8266](https://github.com/fotahub/fotahub-device-sdk-esp8266) to a location of your choice on your machine. 
 
 > &#x26A0; Make sure that the path to the location of the FotaHub Device SDK for ESP8266 on your machine does not contain any spaces.
 
-### Create a FotaHub product
-
-Create a FotaHub product that represents your board in FotaHub as explained [here](../fotahub/create-product.md). It will be used to upload and provide firmware updates for the same. 
-
 ### Create and run initial firmware version
 
 1. Start the Visual Studio Code and open (`File > Folder...`) the `Simple` example included in the FotaHub Device SDK for ESP8266 (`<device-sdk-root>/examples/huzzah/simple`).
 
-2. Go to the `user_config.c` file and initialize the `WIFI_STATION_SSID` and `WIFI_STATION_PASSPHRASE` variables with the crentials of the Wi-Fi network you want to connect to with your board:
+2. Go to the `user_config.c` file and initialize the `WIFI_STATION_SSID` and `WIFI_STATION_PASSPHRASE` variables with the credentials of the Wi-Fi network you want to connect to with your board:
 
 ```c
 ICACHE_RODATA_ATTR
@@ -133,7 +133,7 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.1";
 #define BLINK_PERIOD 250
 ```
 
-3. Rebuild the example using Docker and `mind` or `make` in very much the same way as you did for building the initial firmware version (see step 4 in previous section). Locate the resulting new firmware binary files named `DemoProduct1.bin` and `DemoProduct2.bin` in the `build/bin` folder (using the `Explorer` view).
+3. Rebuild the example using Docker and `mind` or `make` in very much the same way as you did for building the initial firmware version (see step 4 in the previous section). Locate the resulting new firmware binary files named `DemoProduct1.bin` and `DemoProduct2.bin` in the `build/bin` folder (using the `Explorer` view).
    
 > &#x1F6C8; You can locate the new firmware binary files also in your file system explorer or copy their paths to the clipboard using corresponding Visual Studio Code context menu actions (`Reveal in File Explorer` and `Copy Path`). This can come quite handy in the subsequent steps.
 
