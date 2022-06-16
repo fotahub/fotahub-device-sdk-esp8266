@@ -5,13 +5,11 @@ The FotaHub&reg; Device SDK for ESP8266&reg; enables developers to create firmwa
 To use the FotaHub&reg; Device SDK for ESP8266&reg;, the prerequisites described in the following must be available on your laptop or computer. The easiest and quickest way to make that happen is to use Docker. If you are an experienced user, you may also opt for installing the complete set of prerequisites directly on your machine instead.
 
 ## ESP8266 NONOS SDK and toolchain
-
-When using Docker, nothing but [Docker](https://docs.docker.com/get-docker) itself needs to be installed to cover the ESP8266-specific preqrequisites. All of the latter are included a dedicated Docker image that is provided at [Docker Hub](https://hub.docker.com/r/fotahub/esp8266-nonos-sdk). It gets automatically pulled onto your machine when running the build commands of the various examples included in this project.
+When using Docker, nothing but [Docker](https://docs.docker.com/get-docker) itself needs to be installed to cover the ESP8266-specific preqrequisites. All of the latter are included in a dedicated Docker image that is provided at [Docker Hub](https://hub.docker.com/r/fotahub/esp8266-nonos-sdk). It gets automatically pulled onto your machine when running the build commands of the various examples included in this project.
 
 In case you prefer to set up the ESP8266 build environment directly on your machine, you don't need Docker but must install the required SDKs and tools manually as explained [here](docs/installation/install-build-environment.md). 
 
 ## General purpose tools
-
 In addition to the ESP8266-related prerequisites, the following general purpose tools need to be available on your laptop or computer:
 * A text editor or IDE of your choice, e.g., [Visual Studio Code](https://code.visualstudio.com)  
 * A serial monitor of your choice, e.g., [CoolTerm](https://freeware.the-meiers.org) (a nice quick start guide can be found [here](https://learn.adafruit.com/getting-started-with-binho-nova/quickstart-with-coolterm))
