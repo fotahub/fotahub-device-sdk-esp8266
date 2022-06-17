@@ -21,7 +21,7 @@ ICACHE_RODATA_ATTR
 char const DEMO_PRODUCT_ID[] = "<Your FotaHub product id>";
 
 ICACHE_RODATA_ATTR
-char const DEMO_PRODUCT_NAME[] = "DemoProduct";
+char const DEMO_PRODUCT_NAME[] = "Demo Product";
 
 ICACHE_RODATA_ATTR
 char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.0";
