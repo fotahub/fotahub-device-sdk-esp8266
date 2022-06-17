@@ -16,7 +16,7 @@ Once a valid update info string has been received and the contained new firmware
 
 `https://bin.fotahub.com/6258c080-85f6-4a7a-84a2-7a9ef16d03fc/DemoProduct-1.1@1`
 
-The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature gets recalculated and compared to the corresponding checksum or signature included in the previously communicated update info string. If both match, the firmware update gets activated by restarting the device and letting boot it into the partition where the downloaded firmware binary has been stored. After the restart, the device executes the new firmware version downloaded from FotaHub. 
+The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature gets recalculated and compared to the corresponding checksum or signature included in the previously communicated update info string. If both match, the firmware update gets applied by restarting the device and letting boot it into the partition where the downloaded firmware binary has been stored. After the restart, the device executes the new firmware version downloaded from FotaHub. 
 
 ## Supported targets
 
@@ -40,7 +40,7 @@ If not yet done so, either clone or download and uncompress the [FotaHub Device 
 
 ### Create and run initial firmware version
 
-1. Start the Visual Studio Code and open (`File > Folder...`) the `Simple` example included in the FotaHub Device SDK for ESP8266 (`<device-sdk-root>/examples/huzzah/simple`).
+1. Start Visual Studio Code and open (`File` > `Folder...`) the `Simple` example included in the FotaHub Device SDK for ESP8266 (`<device-sdk-root>/examples/huzzah/simple`).
 
 2. Go to the `user_config.c` file and initialize the `WIFI_STATION_SSID` and `WIFI_STATION_PASSPHRASE` variables with the credentials of the Wi-Fi network you want to connect to with your board:
 
@@ -52,7 +52,7 @@ ICACHE_RODATA_ATTR
 char const WIFI_STATION_PASSWORD[] = "my-cryptic-WiFi-passphrase";
 ```
 
-3. Open the `DemoProductInfo.c` file and initialize the `DEMO_PRODUCT_ID` and `DEMO_PRODUCT_NAME` variables with the id and the name of the previously created FotaHub product (see `Products > {{Your FotaHub product}} > Settings > General` at [Fotahub](https://fotahub.com)). Leave the `DEMO_PRODUCT_FIRMWARE_VERSION` as is for now:
+3. Open the `DemoProductInfo.c` file and initialize the `DEMO_PRODUCT_ID` and `DEMO_PRODUCT_NAME` variables with the id and the name of the previously created FotaHub product (see `Products` > `{{Your FotaHub product}}` > `Settings` > `General` at [Fotahub](https://fotahub.com)). Leave the `DEMO_PRODUCT_FIRMWARE_VERSION` as is for now:
 
 ```c
 ICACHE_RODATA_ATTR
@@ -71,7 +71,7 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.0";
 #define DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM FOTA_UPDATE_VERIFICATION_ALGORITHM_SHA256
 ```
 
-4. Open the integrated terminal (`Terminal > New Terminal`) and build the example by running `make`.
+4. Open the integrated terminal (`Terminal` > `New Terminal`) and build the example by running `make`.
     
     When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat`/`mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
    
@@ -112,7 +112,7 @@ flash <COM port name, e.g., COM3>
 make flash SDK_HOME=<ESP8266 NONOS SDK install/checkout location> ESPTOOL_COM_PORT=<COM or serial port name, e.g., COM3 or /dev/ttyUSB0>
 ```
 
-7. Start your serial monitor app, point it at the serial port your board is connected to, and set the baudrate to `57600` (`Connection > Options...` in CoolTerm). Open the configured serial port (`Connection > Connect` in CoolTerm), observe how the firmware starts up and verify whether it connects to the Wi-Fi network:
+7. Start your serial monitor app, point it at the serial port your board is connected to, and set the baudrate to `57600` (`Connection` > `Options...` in CoolTerm). Open the configured serial port (`Connection` > `Connect` in CoolTerm), observe how the firmware starts up and verify whether it connects to the Wi-Fi network:
 
 ![](simple-1.png "Start of initial firmware version")
 
@@ -141,11 +141,11 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.1";
 
 ### Make your first firmare over-the-air update 
 
-1. Go back to the serial monitor app showing the execution status of your board running the initial firmware version. Enter the new firmware version followed by a ':' separator, the checksum or signature of the first firmware partition, a ',' separator, and the checksum or signature of the second firmware partition (see `Products > {{Your FotaHub product}} > Details > {{New firmware version}}` at [Fotahub](https://fotahub.com)). Also append a terminating line break in the text field or dialog provided for sending data over the opened serial port (`Connection > Send String...` in CoolTerm):
+1. Go back to the serial monitor app showing the execution status of your board running the initial firmware version. Enter the new firmware version followed by a ':' separator, the checksum or signature of the first firmware partition, a ',' separator, and the checksum or signature of the second firmware partition (see `Products` > `{{Your FotaHub product}}` > `Details` > `{{New firmware version}}` at [Fotahub](https://fotahub.com)). Also append a terminating line break in the text field or dialog provided for sending data over the opened serial port (`Connection` > `Send String...` in CoolTerm):
 
 ![](simple-2.png "Trigger of FOTA update") 
 
-> &#x1F6C8; In most cases, your serial monitor app can be configured to automatically terminate all strings being sent with a line break so that you can't forget to do so manually upon every submission (`Connection > Options... > Transmit > Send String Options > Terminate 'Send String' Data` in CoolTerm).
+> &#x1F6C8; In most cases, your serial monitor app can be configured to automatically terminate all strings being sent with a line break so that you can't forget to do so manually upon every submission (`Connection` > `Options...` > `Transmit` > `Send String Options` > `Terminate 'Send String' Data` in CoolTerm).
 
 2. Submit the firmware update info string to your board (`Send` button in CoolTerm). This will trigger the firmware over-the-air update procedure. Upon successful completion, the board will be restarted with the new firmware version downloaded from FotaHub. To verify that, check the firmware version in the banner showing up in the serial monitor output:
 

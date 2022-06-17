@@ -40,7 +40,7 @@ When the update info attributes found in the delta state document are complete a
 
 `https://bin.fotahub.com/6258c080-85f6-4a7a-84a2-7a9ef16d03fc/DemoProduct-1.1@1`
 
-The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature gets recalculated and compared to the corresponding checksum or signature included in the previously received delta state document. If both match, the firmware update gets activated by restarting the device and letting boot it into the flash memory partition where the downloaded firmware binary has been stored. 
+The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature gets recalculated and compared to the corresponding checksum or signature included in the previously received delta state document. If both match, the firmware update gets applied by restarting the device and letting boot it into the flash memory partition where the downloaded firmware binary has been stored. 
 
 After the restart, the device starts executing the new firmware version downloaded from FotaHub. To be sure that it behaves as expeced, a built-in self test procedure is launched. Only when the latter completes successfully, the new firmware version is confirmed and becomes definite. In the opposite case, the previous firmware version is restored.
 
@@ -66,7 +66,7 @@ A description of the SDKs and tools that must be available on your laptop or com
 
 <p style="margin-left: 2em">A comprehensive guide explaining how to proceed in detail can be found <a href="https://docs.aws.amazon.com/iot/latest/developerguide/create-iot-resources.html">here</a>.</p> 
 
-3. Delete the initially created unnamed classic shadow of your AWS IoT thing (`Manage > Things > {{Your AWS IoT thing}} > Device Shadows > Classic Shadow > Delete` when using the *New console experience* which can be activated all down in the left side bar).
+3. Delete the initially created unnamed classic shadow of your AWS IoT thing (`Manage` > `Things` > `{{Your AWS IoT thing}}` > `Device Shadows` > `Classic Shadow` > `Delete` when using the *New console experience* which can be activated all down in the left side bar).
 
 ### Create a FotaHub product
 
@@ -80,7 +80,7 @@ If not yet done so, either clone or download and uncompress the [FotaHub Device 
 
 ### Prepare initial firmware version
 
-1. Start the Visual Studio Code and open (`File > Folder...`) the `Thing Shadow` example included in the FotaHub Device SDK for ESP32 (`<device-sdk-root>/examples/huzzah/thingshadow`).
+1. Start Visual Studio Code and open (`File` > `Folder...`) the `Thing Shadow` example included in the FotaHub Device SDK for ESP32 (`<device-sdk-root>/examples/huzzah/thingshadow`).
 
 2. Go to the `user_config.c` file and initialize the `WIFI_STATION_SSID` and `WIFI_STATION_PASSPHRASE` variables with the credentials of the Wi-Fi network you want to connect to with your board:
 
@@ -92,7 +92,7 @@ ICACHE_RODATA_ATTR
 char const WIFI_STATION_PASSWORD[] = "my-cryptic-WiFi-passphrase";
 ```
 
-3. Open the `DemoProductInfo.c` file and initialize the `DEMO_PRODUCT_ID` and `DEMO_PRODUCT_NAME` variables with the id and the name of the previously created FotaHub product (see `Products > {{Your FotaHub product}} > Settings > General` at [Fotahub](https://fotahub.com)). Leave the `DEMO_PRODUCT_FIRMWARE_VERSION` as is for now:
+3. Open the `DemoProductInfo.c` file and initialize the `DEMO_PRODUCT_ID` and `DEMO_PRODUCT_NAME` variables with the id and the name of the previously created FotaHub product (see `Products` > `{{Your FotaHub product}}` > `Settings` > `General` at [Fotahub](https://fotahub.com)). Leave the `DEMO_PRODUCT_FIRMWARE_VERSION` as is for now:
 
 ```c
 ICACHE_RODATA_ATTR
@@ -111,7 +111,7 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.0";
 #define DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM FOTA_UPDATE_VERIFICATION_ALGORITHM_SHA256
 ```
 
-4. Open the `ESP8266AWSIoTThingShadowConfiguration.c` file and initialize the `hostNameEndPoint.hostName` and `awsIoTConnParams.thingName` struct variable fields with your AWS account's [device data endpoint](https://docs.aws.amazon.com/iot/latest/developerguide/iot-connect-devices.html#iot-connect-device-endpoints) and the name of the previously created AWS IoT thing (see `Settings > Device data endpoint` and `Manage > Things` in the [AWS IoT Console](https://console.aws.amazon.com/iot/home) when using the *New console experience* which can be activated all down in the left side bar):
+4. Open the `ESP8266AWSIoTThingShadowConfiguration.c` file and initialize the `hostNameEndPoint.hostName` and `awsIoTConnParams.thingName` struct variable fields with your AWS account's [device data endpoint](https://docs.aws.amazon.com/iot/latest/developerguide/iot-connect-devices.html#iot-connect-device-endpoints) and the name of the previously created AWS IoT thing (see `Settings` > `Device data endpoint` and `Manage` > `Things` in the [AWS IoT Console](https://console.aws.amazon.com/iot/home) when using the *New console experience* which can be activated all down in the left side bar):
 
 ```c
 HostNameEndpointAddress_t hostNameEndPoint = 
@@ -133,7 +133,7 @@ AWSIoTConnectionParameters_t awsIoTConnParams =
    
 ### Build and flash initial firmware version
 
-1. Open the integrated terminal (`Terminal > New Terminal`) and build the example by running `make`.
+1. Open the integrated terminal (`Terminal` > `New Terminal`) and build the example by running `make`.
     
     When you have opted to use the ESP8266 NONOS SDK and ESP8266 toolchain through Docker, `make` must be run inside a Docker container providing the same. You can achieve that conveniently by making sure that Docker is running on your machine and invoking the `mind.bat`/`mind.sh` (**M**ake **IN** **D**ocker) script according to your operating system:
    
@@ -174,13 +174,13 @@ flash <COM port name, e.g., COM3>
 make flash SDK_HOME=<ESP8266 NONOS SDK install/checkout location> ESPTOOL_COM_PORT=<COM or serial port name, e.g., COM3 or /dev/ttyUSB0>
 ```
 
-4. Start your serial monitor app, point it at the serial port your board is connected to, and set the baudrate to `57600` (`Connection > Options...` in CoolTerm). Open the configured serial port (`Connection > Connect` in CoolTerm), observe how the firmware starts up and verify whether it connects to the Wi-Fi network as well as to its AWS IoT Thing Shadow:
+4. Start your serial monitor app, point it at the serial port your board is connected to, and set the baudrate to `57600` (`Connection` > `Options...` in CoolTerm). Open the configured serial port (`Connection` > `Connect` in CoolTerm), observe how the firmware starts up and verify whether it connects to the Wi-Fi network as well as to its AWS IoT Thing Shadow:
 
 ![](thingshadow-1.png "Start of initial firmware version")
 
 <p style="margin-left: 2em">Also have a look at the red LED next to the USB port on your board (GPIO #0). It should blink with a period of approx. 1 s.</p> 
 
-5. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and visit the unnamed classic shadow of your AWS IoT thing (`Manage > Things > {{Your AWS IoT thing}} > Device Shadows > Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Click on the refresh button if no such is displayed. You should see that yields a shadow state document with a `currentVersion` attribute that indicates the currently running firmware version on your board:
+5. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and visit the unnamed classic shadow of your AWS IoT thing (`Manage` > `Things` > `{{Your AWS IoT thing}}` > `Device Shadows` > `Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Click on the refresh button if no such is displayed. You should see that yields a shadow state document with a `currentVersion` attribute that indicates the currently running firmware version on your board:
 
 ![](thingshadow-2.png "Initial thing shadow state")
 
@@ -213,7 +213,7 @@ You can perfom cloud-triggered firmare over-the-air updates either [interactivel
 
 #### Interactive firmare over-the-air update using the AWS IoT Console
 
-1. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and revisit the unnamed classic shadow of your AWS IoT thing (`Manage > Things > {{Your AWS IoT thing}} > Device Shadows > Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Open the shadow state document for editing (`Device Shadow document > Edit`). Add a `desired` object with a `newVersion` attribute to indicate the new firmware version your board should be updated to and a `verificationData` attribute with the checksums or signatures of the first and second firmware partition directly concatenated to each other (see `Products > {{Your FotaHub product}} > Details > {{New firmware version}}` at [Fotahub](https://fotahub.com)):
+1. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and revisit the unnamed classic shadow of your AWS IoT thing (`Manage` > `Things` > `{{Your AWS IoT thing}}` > `Device Shadows` > `Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Open the shadow state document for editing (`Device Shadow document` > `Edit`). Add a `desired` object with a `newVersion` attribute to indicate the new firmware version your board should be updated to and a `verificationData` attribute with the checksums or signatures of the first and second firmware partition directly concatenated to each other (see `Products` > `{{Your FotaHub product}}` > `Details` > `{{New firmware version}}` at [Fotahub](https://fotahub.com)):
 
 ```json
 {
@@ -230,7 +230,7 @@ You can perfom cloud-triggered firmare over-the-air updates either [interactivel
 }
 ```
 
-2. Save the modified shadow state document (`Edit Device Shadow state > Update`). This will trigger the firmware over-the-air update procedure. Upon successful completion (typically after 1 minute or so), the board will be restarted with the new firmware version downloaded from FotaHub. The built-in self test is executed and, in case it succeeds, the new firmware version is confirmed and stays in place. You can see that
+2. Save the modified shadow state document (`Edit Device Shadow state` > `Update`). This will trigger the firmware over-the-air update procedure. Upon successful completion (typically after 1 minute or so), the board will be restarted with the new firmware version downloaded from FotaHub. The built-in self test is executed and, in case it succeeds, the new firmware version is confirmed and stays in place. You can see that
    * by observing the **red LED** on your board - it should end up blinking significantly faster than before
    * by inspecting the **shadow state document** in the AWS IoT Console - it should reflect the new firmware version as the currently running version and include an `updateStatus` attribute indicating the successful completion of the firmware over-the-air update:
    
@@ -251,7 +251,7 @@ You can perfom cloud-triggered firmare over-the-air updates either [interactivel
 
 1. If not already done so, [install](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) and [configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config) the AWS CLI version 2.
 
-2. Go back to the integrated terminal or just open a new one (`Terminal > New Terminal`) and trigger a firmware over-the-air update for your board by entering an [aws iot-data publish](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iot-data/publish.html) command as shown below. Provide the name of your AWS IoT thing, the new firmware version your board should be updated to as well as the checksums or signatures of the first and second firmware partition directly concatenated to each other (see `Products > {{Your FotaHub product}} > Details > {{New firmware version}}` at [Fotahub](https://fotahub.com)):
+2. Go back to the integrated terminal or just open a new one (`Terminal` > `New Terminal`) and trigger a firmware over-the-air update for your board by entering an [aws iot-data publish](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iot-data/publish.html) command as shown below. Provide the name of your AWS IoT thing, the new firmware version your board should be updated to as well as the checksums or signatures of the first and second firmware partition directly concatenated to each other (see `Products` > `{{Your FotaHub product}}` > `Details` > `{{New firmware version}}` at [Fotahub](https://fotahub.com)):
 
 **Windows:**   
 ```bat
