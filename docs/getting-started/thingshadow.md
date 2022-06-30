@@ -40,7 +40,7 @@ When the update info attributes found in the delta state document are complete a
 
 `https://bin.fotahub.com/6258c080-85f6-4a7a-84a2-7a9ef16d03fc/DemoProduct-1.1@1`
 
-The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature gets recalculated and compared to the corresponding checksum or signature included in the previously received delta state document. If both match, the firmware update is applied by restarting the device and letting it boot into the flash memory partition where the downloaded firmware binary has been stored. 
+The downloaded firmware binary is stored in the device's flash memory using the partition that is not occupied by the still executing firmware version. At the same time, the downloaded firmware binary's checksum or signature is recalculated and compared to the corresponding checksum or signature included in the previously received delta state document. If both match, the firmware update is applied by restarting the device and letting it boot into the flash memory partition where the downloaded firmware binary has been stored. 
 
 After the restart, the device starts executing the new firmware version downloaded from FotaHub. To be sure that it behaves as expeced, a built-in self test procedure is launched. Only when the latter completes successfully, the new firmware version is confirmed and becomes definite. In the opposite case, the previous firmware version is restored.
 
@@ -203,7 +203,7 @@ char const DEMO_PRODUCT_FIRMWARE_VERSION[] = "1.1";
 
 3. Rebuild the example using Docker and `mind` or `make` in very much the same way as you did for building the initial firmware version (see step 1 in the previous section). Locate the resulting new firmware binary files named `DemoProduct1.bin` and `DemoProduct2.bin` in the `build/bin` folder (using the `Explorer` view).
    
-> &#x1F6C8; You can locate the new firmware binary files also in your file system explorer or copy their paths to the clipboard using corresponding Visual Studio Code context menu actions (`Reveal in File Explorer` and `Copy Path`). This can come quite handy in the subsequent steps.
+> &#x1F6C8; You can locate the new firmware binary files also in your file system explorer or copy their paths to the clipboard by using corresponding context menu actions in Visual Studio Code (`Reveal in File Explorer` and `Copy Path`). This can come quite handy in the subsequent steps.
 
 4. Upload the new binaries (`build/bin/DemoProduct1.bin`, `build/bin/DemoProduct2.bin`) as firmware version `1.1` to your FotaHub product as explained [here](../fotahub/upload-firmware.md).
 
