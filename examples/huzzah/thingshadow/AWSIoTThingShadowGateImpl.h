@@ -64,7 +64,7 @@ struct AWSIoTThingShadowGateImpl__cdata {
   /* 
    * fields
    */
-  const void* awsIoTThingShadowSession__field;
+  void const* awsIoTThingShadowSession__field;
   /* 
    * fields
    */
@@ -113,7 +113,7 @@ void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_awsThingShadowEngine__init(awsT
 
 bool ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_awsThingShadowEngine__execute(awsThingShadowEngine__data_t *instance, awsThingShadowEngine__inevents_t event, void *arguments[], void *___id);
 
-void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_connectionError(const void* hSession, IoTError_t error, void *___id);
+void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_connectionError(void const* hSession, IoTError_t error, void *___id);
 
 void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_runnable_run(void *___id);
 
@@ -125,13 +125,13 @@ void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_evaluateUpdateInfo(void *___id)
 
 void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_connectionMonitorHandler_statusChanged(ConnectionStatus_t status, void *___id);
 
-void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_connected(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_connected(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_disconnected(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_disconnected(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_status(const void* hSession, char const *thingName, IoTAction_t action, IoTResponseStatus_t status, char *jsonString, size_t jsonStringLength, void *___id);
+void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_status(void const* hSession, char const *thingName, IoTAction_t action, IoTResponseStatus_t status, char *jsonString, size_t jsonStringLength, void *___id);
 
-void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_desired(const void* hSession, char const *thingName, char *jsonString, size_t jsonStringLength, void *___id);
+void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_thingShadowHandler_desired(void const* hSession, char const *thingName, char *jsonString, size_t jsonStringLength, void *___id);
 
 void ICACHE_FLASH_ATTR AWSIoTThingShadowGateImpl_fotaUpdateStatusHandler_updateStatus(FOTAUpdateStatus_t status, void *___id);
 

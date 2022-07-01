@@ -39,9 +39,9 @@ void ICACHE_FLASH_ATTR user_init(void)
 {
   one_uart_init(UART_UNIT, UART_BAUDRATE);
   
-  os_printf("\n--------------------------------------------------------------------------\n");
-  os_printf("Running %s %s firmware from partition %d\n", ((char *)(DEMO_PRODUCT_NAME)), ((char *)(DEMO_PRODUCT_FIRMWARE_VERSION)), system_upgrade_userbin_check() + 1);
-  os_printf("--------------------------------------------------------------------------\n\n");
+  os_printf("\r\n--------------------------------------------------------------------------\r\n");
+  os_printf("Running %s %s firmware from partition %d\r\n", ((char *)(DEMO_PRODUCT_NAME)), ((char *)(DEMO_PRODUCT_FIRMWARE_VERSION)), system_upgrade_userbin_check() + 1);
+  os_printf("--------------------------------------------------------------------------\r\n\r\n");
   
   userLoop_init();
   blink_init(USER_LOOP_INTERVAL, BLINK_PERIOD);

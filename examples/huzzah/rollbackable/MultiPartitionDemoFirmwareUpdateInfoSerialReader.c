@@ -73,7 +73,7 @@ void ICACHE_FLASH_ATTR firmwareUpdateInfoReader_run(void)
 {
   if ((updateInfoParser.__currentState == FirmwareUpdateInfoParser_yielding__state)) 
   {
-    os_printf("Firmware update request towards version %s received\n", updateVersion);
+    os_printf("Firmware update request towards version %s received\r\n", updateVersion);
     fotaUpdateWorkflow_onFirmwareUpdateVersionChanged(updateVersion);
     FirmwareUpdateInfoParser__execute(&updateInfoParser, FirmwareUpdateInfoParser_updateInfoPickedUp__event, NULL);
   }
@@ -104,6 +104,13 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
       {
         case FirmwareUpdateInfoParser_characterReceived__event:
         {
+          if (((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) && instance->characterIdx == 0) 
+          {
+            /* 
+             * enter target state
+             */
+            break;
+          }
           if ((*((uint8_t *)((arguments[0])))) != COLON && isspace((*((uint8_t *)((arguments[0]))))) == 0 && instance->characterIdx < MAX_DEMO_FIRMWARE_UPDATE_VERSION_LENGTH - 1) 
           {
             /* 
@@ -142,7 +149,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             /* 
              * transition actions
              */
-            os_printf("Received firmware update version too long (max. length = %d)\n", MAX_DEMO_FIRMWARE_UPDATE_VERSION_LENGTH);
+            os_printf("Received firmware update version too long (max. length = %d)\r\n", MAX_DEMO_FIRMWARE_UPDATE_VERSION_LENGTH);
             
             /* 
              * enter target state
@@ -155,7 +162,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             /* 
              * transition actions
              */
-            os_printf("Firmware update request with missing version received\n");
+            os_printf("Firmware update request with missing version received\r\n");
             
             /* 
              * enter target state
@@ -163,26 +170,12 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             instance->__currentState = FirmwareUpdateInfoParser_receiving_receivingBadCharacters__state;
             break;
           }
-          if ((*((uint8_t *)((arguments[0])))) == LF && instance->characterIdx == 0) 
+          if (((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) && instance->characterIdx > 0) 
           {
             /* 
              * transition actions
              */
-            os_printf("Empty firmware update request received\n");
-            instance->characterIdx = 0;
-            instance->partitionIdx = 0;
-            
-            /* 
-             * enter target state
-             */
-            break;
-          }
-          if ((*((uint8_t *)((arguments[0])))) == LF && instance->characterIdx > 0) 
-          {
-            /* 
-             * transition actions
-             */
-            os_printf("Firmware update request with missing verification data received\n");
+            os_printf("Firmware update request with missing verification data received\r\n");
             memset(updateVersion, 0, sizeof(updateVersion));
             instance->characterIdx = 0;
             instance->partitionIdx = 0;
@@ -205,14 +198,14 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
       {
         case FirmwareUpdateInfoParser_characterReceived__event:
         {
-          if ((*((uint8_t *)((arguments[0])))) != LF) 
+          if ((*((uint8_t *)((arguments[0])))) != CARRET && (*((uint8_t *)((arguments[0])))) != LINEF) 
           {
             /* 
              * enter target state
              */
             break;
           }
-          if ((*((uint8_t *)((arguments[0])))) == LF) 
+          if ((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) 
           {
             /* 
              * transition actions
@@ -289,7 +282,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
              */
             break;
           }
-          if ((*((uint8_t *)((arguments[0])))) == LF && instance->characterIdx > 0 && instance->partitionIdx == UPDATE_PARTITION_COUNT - 1) 
+          if (((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) && instance->characterIdx > 0 && instance->partitionIdx == UPDATE_PARTITION_COUNT - 1) 
           {
             /* 
              * enter target state
@@ -302,7 +295,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             /* 
              * transition actions
              */
-            os_printf("Received firmware update verification data #%d too long (max. length = %d)\n", instance->partitionIdx + 1, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM) << 1);
+            os_printf("Received firmware update verification data #%d too long (max. length = %d)\r\n", instance->partitionIdx + 1, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM) << 1);
             
             /* 
              * enter target state
@@ -315,7 +308,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             /* 
              * transition actions
              */
-            os_printf("Firmware update request with missing verification data #%d received\n", instance->partitionIdx + 1);
+            os_printf("Firmware update request with missing verification data #%d received\r\n", instance->partitionIdx + 1);
             
             /* 
              * enter target state
@@ -328,7 +321,7 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             /* 
              * transition actions
              */
-            os_printf("Firmware update request with too many verifications data received (max. # = %d)\n", UPDATE_PARTITION_COUNT);
+            os_printf("Firmware update request with too many verifications data received (max. # = %d)\r\n", UPDATE_PARTITION_COUNT);
             
             /* 
              * enter target state
@@ -336,12 +329,12 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             instance->__currentState = FirmwareUpdateInfoParser_receiving_receivingBadCharacters__state;
             break;
           }
-          if ((*((uint8_t *)((arguments[0])))) == LF && instance->characterIdx == 0) 
+          if (((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) && instance->characterIdx == 0) 
           {
             /* 
              * transition actions
              */
-            os_printf("Firmware update request with missing verification data #%d received\n", instance->partitionIdx + 1);
+            os_printf("Firmware update request with missing verification data #%d received\r\n", instance->partitionIdx + 1);
             memset(updateVersion, 0, sizeof(updateVersion));
             os_memset(updateVerificationData[0], 0, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM));
             os_memset(updateVerificationData[1], 0, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM));
@@ -357,12 +350,12 @@ static bool ICACHE_FLASH_ATTR FirmwareUpdateInfoParser__execute(FirmwareUpdateIn
             }
             break;
           }
-          if ((*((uint8_t *)((arguments[0])))) == LF && instance->characterIdx > 0 && instance->partitionIdx < UPDATE_PARTITION_COUNT - 1) 
+          if (((*((uint8_t *)((arguments[0])))) == CARRET || (*((uint8_t *)((arguments[0])))) == LINEF) && instance->characterIdx > 0 && instance->partitionIdx < UPDATE_PARTITION_COUNT - 1) 
           {
             /* 
              * transition actions
              */
-            os_printf("Firmware update request with missing verification data #%d received\n", instance->partitionIdx + 2);
+            os_printf("Firmware update request with missing verification data #%d received\r\n", instance->partitionIdx + 2);
             memset(updateVersion, 0, sizeof(updateVersion));
             os_memset(updateVerificationData[0], 0, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM));
             os_memset(updateVerificationData[1], 0, getVerificationDataSize(DEMO_PRODUCT_FIRMWARE_UPDATE_VERIFICATION_ALGORITHM));

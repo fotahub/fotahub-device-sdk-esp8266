@@ -46,7 +46,7 @@ struct MQTTSessionData {
   bool connected;
   void *pUserData;
   IMQTTClientHandler__idata_t *mqttClientHandler;
-  const void* hSocketSession;
+  void const* hSocketSession;
   uint8_t nextPacketID;
   uint16_t keepAliveInterval;
   float keepAliveIntervalScale;
@@ -90,33 +90,33 @@ bool ICACHE_FLASH_ATTR MQTTClientImpl_isMQTTSessionDataDeleted(MQTTSessionData_t
 
 void ICACHE_FLASH_ATTR MQTTClientImpl_deleteMQTTSessionData(MQTTSessionData_t *pSessionData, void *___id);
 
-const void* ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_connect(MQTTConnectionParameters_t *pConnParams, void *pUserData, void *___id);
+void const* ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_connect(MQTTConnectionParameters_t *pConnParams, void *pUserData, void *___id);
 
-bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_isConnected(const void* hSession, void *___id);
+bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_isConnected(void const* hSession, void *___id);
 
-bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_subscribe(const void* hSession, char *topicList[], MQTTQoS_t qosList[], uint64_t const  topicCount, uint16_t subMsgId, bool duplicatedMsg, void *___id);
+bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_subscribe(void const* hSession, char *topicList[], MQTTQoS_t qosList[], uint64_t const  topicCount, uint16_t subMsgId, bool duplicatedMsg, void *___id);
 
-Datagram_t *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_newPublishMessage(const void* hSession, size_t payloadLength, void *___id);
+Datagram_t *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_newPublishMessage(void const* hSession, size_t payloadLength, void *___id);
 
-bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_sendPublishMessage(const void* hSession, char *topicName, Datagram_t *pMessage, MQTTPublishParameters_t *pParams, void *___id);
+bool ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_sendPublishMessage(void const* hSession, char *topicName, Datagram_t *pMessage, MQTTPublishParameters_t *pParams, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_disconnect(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_disconnect(void const* hSession, void *___id);
 
-void *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_getUserData(const void* hSession, void *___id);
+void *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_getUserData(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_connected(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_connected(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_datagramSent(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_datagramSent(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_datagramReceived(const void* hSession, Datagram_t *pDatagram, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_datagramReceived(void const* hSession, Datagram_t *pDatagram, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_disconnected(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_disconnected(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_connectionError(const void* hSession, SocketError_t error, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_clientSocketHandler_connectionError(void const* hSession, SocketError_t error, void *___id);
 
-void ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_deleteDatagram(const void* hSession, Datagram_t *pDatagram, void *___id);
+void ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_deleteDatagram(void const* hSession, Datagram_t *pDatagram, void *___id);
 
-Datagram_t *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_newDatagram(const void* hSession, size_t payloadLength, DatagramType_t type, void *___id);
+Datagram_t *ICACHE_FLASH_ATTR MQTTClientImpl_mqttClient_newDatagram(void const* hSession, size_t payloadLength, DatagramType_t type, void *___id);
 
 void ICACHE_FLASH_ATTR MQTTClientImpl_keepAliveTimerHandler_expired(void *___id);
 

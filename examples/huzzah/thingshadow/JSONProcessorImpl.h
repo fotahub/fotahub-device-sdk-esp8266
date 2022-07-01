@@ -84,15 +84,15 @@ void ICACHE_FLASH_ATTR JSONProcessorImpl_jsonParser_resetFlags(struct jsontree_v
 
 bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_serialize(struct jsontree_value *pDocumentModel, JSONObjectSerializationMode_t mode, IJSONDocumentIOHandler__idata_t *documentIOHandler, void *pUserData, char *msg, size_t msgSize, void *___id);
 
-const void* ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginDocument(struct jsontree_value *pDocumentModel, IJSONDocumentIOHandler__idata_t *documentIOHandler, void *pUserData, char *msg, size_t msgSize, void *___id);
+void const* ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginDocument(struct jsontree_value *pDocumentModel, IJSONDocumentIOHandler__idata_t *documentIOHandler, void *pUserData, char *msg, size_t msgSize, void *___id);
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginObject(const void* hDocument, char const *path, void *___id);
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginObject(void const* hDocument, char const *path, void *___id);
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_addValue(const void* hDocument, char const *path, JSONObjectSerializationMode_t mode, void *___id);
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_addValue(void const* hDocument, char const *path, JSONObjectSerializationMode_t mode, void *___id);
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endObject(const void* hDocument, void *___id);
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endObject(void const* hDocument, void *___id);
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endDocument(const void* hDocument, void *___id);
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endDocument(void const* hDocument, void *___id);
 
 #ifdef __cplusplus
 } /* extern "C" */

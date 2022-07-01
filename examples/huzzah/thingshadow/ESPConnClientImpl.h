@@ -60,25 +60,25 @@ struct ESPConnClientImpl__cdata {
 };
 typedef struct ESPConnClientImpl__cdata ESPConnClientImpl__cdata_t;
 
-const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConnectionParameters_t *pConnParams, void *pUserData, void *___id);
+void const* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConnectionParameters_t *pConnParams, void *pUserData, void *___id);
 
-bool ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_isConnected(const void* hSession, void *___id);
+bool ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_isConnected(void const* hSession, void *___id);
 
-void *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_getUserData(const void* hSession, void *___id);
+void *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_getUserData(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(const void* hSession, Datagram_t *pDatagram, SocketFrameOptions_t *pOptions, void *___id);
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(void const* hSession, Datagram_t *pDatagram, SocketFrameOptions_t *pOptions, void *___id);
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(const void* hSession, void *___id);
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(void const* hSession, void *___id);
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_internalConnect(const void* hSession, char const *hostName, uint32_t ipAddress, void *___id);
+void ICACHE_FLASH_ATTR ESPConnClientImpl_internalConnect(void const* hSession, char const *hostName, uint32_t ipAddress, void *___id);
 
 void ICACHE_FLASH_ATTR ESPConnClientImpl_dnsLookupHandler_hostNameResolved(char const *hostName, uint32_t ipAddress, void *pUserData, void *___id);
 
-Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_newDatagram(const void* hSession, size_t payloadLength, DatagramType_t type, void *___id);
+Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_newDatagram(void const* hSession, size_t payloadLength, DatagramType_t type, void *___id);
 
-Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_resizeDatagram(const void* hSession, Datagram_t *pDatagram, size_t newSize, void *___id);
+Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_resizeDatagram(void const* hSession, Datagram_t *pDatagram, size_t newSize, void *___id);
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_deleteDatagram(const void* hSession, Datagram_t *pDatagram, void *___id);
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_deleteDatagram(void const* hSession, Datagram_t *pDatagram, void *___id);
 
 #ifdef __cplusplus
 } /* extern "C" */

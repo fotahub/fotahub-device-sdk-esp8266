@@ -482,11 +482,11 @@ static bool ICACHE_FLASH_ATTR jsonparse_do_parse_value(struct jsontree_context *
       }
       case JSON_TYPE_ERROR:
       {
-        os_printf("JSON parse error: %d\n", jsonparse_get_error(parseState));
+        os_printf("JSON parse error: %d\r\n", jsonparse_get_error(parseState));
         return false;
       }
       default: {
-        os_printf("Unknown JSON element type: %d\n", type);
+        os_printf("Unknown JSON element type: %d\r\n", type);
         return false;
       }
     }

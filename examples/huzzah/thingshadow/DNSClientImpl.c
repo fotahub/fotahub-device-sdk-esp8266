@@ -86,13 +86,13 @@ bool ICACHE_FLASH_ATTR DNSClientImpl_dnsClient_resolveHostName(char const *hostN
     return true;
   }
   else if (status == ESPCONN_ARG) {
-    os_printf("Invalid host name (hostName: %s)\n", hostName);
+    os_printf("Invalid host name (hostName: %s)\r\n", hostName);
     os_free(pLookupData);
     return false;
   }
   else
   {
-    os_printf("espconn_gethostbyname() failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn_gethostbyname() failed, error code (errorCode: %d)\r\n", status);
     os_free(pLookupData);
     return false;
   }

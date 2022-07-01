@@ -25,7 +25,7 @@ Datagram_t *ICACHE_FLASH_ATTR DynamicDatagramPoolImpl_datagramPool_newDatagram(s
 {
   if (length == 0) 
   {
-    os_printf("Requested datagram length must be at least 1\n");
+    os_printf("Requested datagram length must be at least 1\r\n");
     return NULL;
   }
   /* 
@@ -34,7 +34,7 @@ Datagram_t *ICACHE_FLASH_ATTR DynamicDatagramPoolImpl_datagramPool_newDatagram(s
   Datagram_t *pDatagram = ((Datagram_t *)(os_malloc(sizeof(Datagram_t) + length)));
   if (pDatagram == NULL) 
   {
-    os_printf("Out of memory\n");
+    os_printf("Out of memory\r\n");
     return NULL;
   }
   pDatagram->pBase = ((uint8_t *)(((ptrdiff_t)(pDatagram)) + sizeof(Datagram_t)));
@@ -64,7 +64,7 @@ Datagram_t *ICACHE_FLASH_ATTR DynamicDatagramPoolImpl_datagramPool_resizeDatagra
   DynamicDatagramPoolImpl__cdata_t *___cid = ((DynamicDatagramPoolImpl__cdata_t *) ___id);
   if (newLength == 0) 
   {
-    os_printf("Requested datagram length must be at least 1\n");
+    os_printf("Requested datagram length must be at least 1\r\n");
     return NULL;
   }
   /* 
@@ -87,7 +87,7 @@ Datagram_t *ICACHE_FLASH_ATTR DynamicDatagramPoolImpl_datagramPool_resizeDatagra
    */
   if (newLength < pDatagram->length - pDatagram->visiblePayloadLength) 
   {
-    os_printf("Requested new datagram length must remain high enough to include at least all downstream protocol headers & trailers located before & behind current visible payload\n");
+    os_printf("Requested new datagram length must remain high enough to include at least all downstream protocol headers & trailers located before & behind current visible payload\r\n");
     return NULL;
   }
   

@@ -187,7 +187,7 @@ static void ICACHE_FLASH_ATTR errorCallback(void *arg, sint8 err)
   disposeESPConn(pConn);
 }
 
-const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConnectionParameters_t *pConnParams, void *pUserData, void *___id)
+void const* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConnectionParameters_t *pConnParams, void *pUserData, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   if (pConnParams == NULL) 
@@ -213,14 +213,14 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
   int8_t status = espconn_regist_connectcb(pConn, &connectCallback);
   if (status != 0) 
   {
-    os_printf("espconn callack registration failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn callack registration failed, error code (errorCode: %d)\r\n", status);
     disposeESPConn(pConn);
     return NULL;
   }
   status = espconn_regist_disconcb(pConn, &disconnectCallback);
   if (status != 0) 
   {
-    os_printf("espconn callack registration failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn callack registration failed, error code (errorCode: %d)\r\n", status);
     disposeESPConn(pConn);
     return NULL;
   }
@@ -230,7 +230,7 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
   status = espconn_regist_reconcb(pConn, &errorCallback);
   if (status != 0) 
   {
-    os_printf("espconn callack registration failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn callack registration failed, error code (errorCode: %d)\r\n", status);
     disposeESPConn(pConn);
     return NULL;
   }
@@ -238,7 +238,7 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
   status = espconn_regist_sentcb(pConn, &sentCallback);
   if (status != 0) 
   {
-    os_printf("espconn callack registration failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn callack registration failed, error code (errorCode: %d)\r\n", status);
     disposeESPConn(pConn);
     return NULL;
   }
@@ -246,7 +246,7 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
   status = espconn_regist_recvcb(pConn, &receiveCallback);
   if (status != 0) 
   {
-    os_printf("espconn callack registration failed, error code (errorCode: %d)\n", status);
+    os_printf("espconn callack registration failed, error code (errorCode: %d)\r\n", status);
     disposeESPConn(pConn);
     return NULL;
   }
@@ -283,19 +283,19 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
     }
     if (!espconn_secure_set_buffer_size(ESPCONN_CLIENT, ___cid->sessionBufferSize__field)) 
     {
-      os_printf("espconn_secure_set_size() failed\n");
+      os_printf("espconn_secure_set_size() failed\r\n");
       disposeESPConn(pConn);
       return NULL;
     }
     if (!espconn_secure_set_max_fragment_length(ESPCONN_CLIENT, pConnParams->pSecureConnectionParams->maxFragmentLength)) 
     {
-      os_printf("espconn_secure_set_max_fragment_length() failed\n");
+      os_printf("espconn_secure_set_max_fragment_length() failed\r\n");
       disposeESPConn(pConn);
       return NULL;
     }
     if (!espconn_secure_set_max_data_rate(ESPCONN_CLIENT, pConnParams->pSecureConnectionParams->maxDataRate)) 
     {
-      os_printf("espconn_secure_set_max_data_rate() failed\n");
+      os_printf("espconn_secure_set_max_data_rate() failed\r\n");
       disposeESPConn(pConn);
       return NULL;
     }
@@ -306,13 +306,13 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
     {
       if (!(*___cid->dnsClient__ops->resolveHostName)(((HostNameEndpointAddress_t *)(pConnParams->pAddr))->hostName, pConn, ___cid->dnsClient__ops->__instance)) 
       {
-        os_printf("Unable to resolve host name:%s\n", ((HostNameEndpointAddress_t *)(pConnParams->pAddr))->hostName);
+        os_printf("Unable to resolve host name:%s\r\n", ((HostNameEndpointAddress_t *)(pConnParams->pAddr))->hostName);
         disposeESPConn(pConn);
         return NULL;
       }
       return pConn;
     }
-    os_printf("DNS Client must be connected to solve hostName\n");
+    os_printf("DNS Client must be connected to solve hostName\r\n");
     return NULL;
   }
   else if (pConnParams->pAddr->type == ENDPOINT_ADDRESS_TYPE_IPV4_ADDRESS) {
@@ -323,11 +323,11 @@ const void* ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_connect(SocketConne
   return NULL;
 }
 
-bool ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_isConnected(const void* hSession, void *___id)
+bool ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_isConnected(void const* hSession, void *___id)
 {
   if (hSession == NULL) 
   {
-    os_printf("Session handle must not be null\n");
+    os_printf("Session handle must not be null\r\n");
     return false;
   }
   struct espconn *pConn = ((struct espconn *) hSession);
@@ -344,11 +344,11 @@ bool ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_isConnected(const void* hS
   return false;
 }
 
-void *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_getUserData(const void* hSession, void *___id)
+void *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_getUserData(void const* hSession, void *___id)
 {
   if (hSession == NULL) 
   {
-    os_printf("Session handle must not be null\n");
+    os_printf("Session handle must not be null\r\n");
     return NULL;
   }
   
@@ -361,12 +361,12 @@ void *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_getUserData(const void* h
   return NULL;
 }
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(const void* hSession, Datagram_t *pDatagram, SocketFrameOptions_t *pOptions, void *___id)
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(void const* hSession, Datagram_t *pDatagram, SocketFrameOptions_t *pOptions, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   if (hSession == NULL) 
   {
-    os_printf("Session handle must not be null\n");
+    os_printf("Session handle must not be null\r\n");
     (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);
     return;
   }
@@ -411,12 +411,12 @@ void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_sendDatagram(const void* h
   (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);
 }
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(const void* hSession, void *___id)
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(void const* hSession, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   if (hSession == NULL) 
   {
-    os_printf("Session handle must not be null\n");
+    os_printf("Session handle must not be null\r\n");
     return;
   }
   struct espconn *pConn = ((struct espconn *) hSession);
@@ -453,7 +453,7 @@ void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_disconnect(const void* hSe
   }
 }
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_internalConnect(const void* hSession, char const *hostName, uint32_t ipAddress, void *___id)
+void ICACHE_FLASH_ATTR ESPConnClientImpl_internalConnect(void const* hSession, char const *hostName, uint32_t ipAddress, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   struct espconn *pConn = ((struct espconn *) hSession);
@@ -511,19 +511,19 @@ void ICACHE_FLASH_ATTR ESPConnClientImpl_dnsLookupHandler_hostNameResolved(char 
   ESPConnClientImpl_internalConnect(pConn, hostName, ipAddress, ___cid);
 }
 
-Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_newDatagram(const void* hSession, size_t payloadLength, DatagramType_t type, void *___id)
+Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_newDatagram(void const* hSession, size_t payloadLength, DatagramType_t type, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   return (*___cid->datagramPool__ops->newDatagram)(payloadLength, ___cid->datagramPool__ops->__instance);
 }
 
-Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_resizeDatagram(const void* hSession, Datagram_t *pDatagram, size_t newSize, void *___id)
+Datagram_t *ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_resizeDatagram(void const* hSession, Datagram_t *pDatagram, size_t newSize, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   return (*___cid->datagramPool__ops->resizeDatagram)(pDatagram, newSize, ___cid->datagramPool__ops->__instance);
 }
 
-void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_deleteDatagram(const void* hSession, Datagram_t *pDatagram, void *___id)
+void ICACHE_FLASH_ATTR ESPConnClientImpl_clientSocket_deleteDatagram(void const* hSession, Datagram_t *pDatagram, void *___id)
 {
   ESPConnClientImpl__cdata_t *___cid = ((ESPConnClientImpl__cdata_t *) ___id);
   (*___cid->datagramPool__ops->deleteDatagram)(pDatagram, ___cid->datagramPool__ops->__instance);

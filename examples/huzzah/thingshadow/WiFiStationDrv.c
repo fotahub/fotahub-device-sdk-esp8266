@@ -32,7 +32,7 @@ bool ICACHE_FLASH_ATTR wifiStation_connect(char const *ssid, char const *passwor
   currentMode = ((currentMode &= ~(SOFTAP_MODE)));
   if (!wifi_set_opmode_current(currentMode)) 
   {
-    os_printf("Failed to activate Wi-Fi station mode\n");
+    os_printf("Failed to activate Wi-Fi station mode\r\n");
     return false;
   }
   
@@ -51,7 +51,7 @@ bool ICACHE_FLASH_ATTR wifiStation_connect(char const *ssid, char const *passwor
   }
   if (!wifi_station_set_config_current(&config)) 
   {
-    os_printf("Failed to set Wi-Fi station configuration\n");
+    os_printf("Failed to set Wi-Fi station configuration\r\n");
     return false;
   }
   
@@ -95,7 +95,7 @@ static void ICACHE_FLASH_ATTR wifiEventHandlerCallback(System_Event_t *sys_evt)
     }
     case EVENT_STAMODE_DHCP_TIMEOUT:
     {
-      os_printf("Failed to obtain Wi-Fi station IP address\n");
+      os_printf("Failed to obtain Wi-Fi station IP address\r\n");
       break;
     }
     case EVENT_SOFTAPMODE_PROBEREQRECVED:
@@ -113,7 +113,7 @@ static void ICACHE_FLASH_ATTR wifiEventHandlerCallback(System_Event_t *sys_evt)
       break;
     }
     default: {
-      os_printf("Unexpected Wi-Fi event encountered: %d\n", sys_evt->event);
+      os_printf("Unexpected Wi-Fi event encountered: %d\r\n", sys_evt->event);
       break;
     }
   }

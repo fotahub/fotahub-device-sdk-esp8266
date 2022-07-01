@@ -28,7 +28,7 @@ struct espconn *ICACHE_FLASH_ATTR createESPConn(enum espconn_type connectionType
   struct espconn *pConn = ((struct espconn *)((os_malloc(sizeof(struct espconn)))));
   if (pConn == NULL) 
   {
-    os_printf("Out of memory\n");
+    os_printf("Out of memory\r\n");
     return NULL;
   }
   /* 
@@ -44,7 +44,7 @@ struct espconn *ICACHE_FLASH_ATTR createESPConn(enum espconn_type connectionType
     esp_tcp *pTCP = ((esp_tcp *)((os_malloc(sizeof(esp_tcp)))));
     if (pTCP == NULL) 
     {
-      os_printf("Out of memory\n");
+      os_printf("Out of memory\r\n");
       disposeESPConn(pConn);
       return NULL;
     }
@@ -58,7 +58,7 @@ struct espconn *ICACHE_FLASH_ATTR createESPConn(enum espconn_type connectionType
     esp_udp *pUDP = ((esp_udp *)((os_malloc(sizeof(esp_udp)))));
     if (pUDP == NULL) 
     {
-      os_printf("Out of memory\n");
+      os_printf("Out of memory\r\n");
       disposeESPConn(pConn);
       return NULL;
     }
@@ -74,7 +74,7 @@ struct espconn *ICACHE_FLASH_ATTR createESPConn(enum espconn_type connectionType
   void *pReverseData = ((void *)(os_malloc(reverseDataSize)));
   if (pReverseData == NULL) 
   {
-    os_printf("Out of memory\n");
+    os_printf("Out of memory\r\n");
     disposeESPConn(pConn);
     return NULL;
   }

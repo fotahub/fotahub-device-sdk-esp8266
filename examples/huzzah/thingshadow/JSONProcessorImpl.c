@@ -50,7 +50,7 @@ JSONParseCtx_t *ICACHE_FLASH_ATTR JSONProcessorImpl_newJSONParseCtx(void *___id)
     ___cid->parseCtx__field.busy = true;
     return &___cid->parseCtx__field;
   }
-  os_printf("No more JSON parse context blocks available\n");
+  os_printf("No more JSON parse context blocks available\r\n");
   return NULL;
 }
 
@@ -65,7 +65,7 @@ JSONSerializeCtx_t *ICACHE_FLASH_ATTR JSONProcessorImpl_newJSONSerializeCtx(char
     ___cid->serializeCtx__field.msgState.pos = 0;
     return &___cid->serializeCtx__field;
   }
-  os_printf("No more JSON serialize context blocks available\n");
+  os_printf("No more JSON serialize context blocks available\r\n");
   return NULL;
 }
 
@@ -79,7 +79,7 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonParser_parse(struct jsontree_value 
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (msg == NULL) 
   {
-    os_printf("JSON message buffer must not be NULL\n");
+    os_printf("JSON message buffer must not be NULL\r\n");
   }
   JSONParseCtx_t *pParseCtx = JSONProcessorImpl_newJSONParseCtx(___cid);
   if (pParseCtx == NULL) 
@@ -108,7 +108,7 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_serialize(struct jsontre
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (msg == NULL) 
   {
-    os_printf("JSON message buffer must not be NULL\n");
+    os_printf("JSON message buffer must not be NULL\r\n");
     return false;
   }
   JSONSerializeCtx_t *pSerializeCtx = JSONProcessorImpl_newJSONSerializeCtx(msg, msgSize, ___cid);
@@ -132,12 +132,12 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_serialize(struct jsontre
   return true;
 }
 
-const void* ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginDocument(struct jsontree_value *pDocumentModel, IJSONDocumentIOHandler__idata_t *documentIOHandler, void *pUserData, char *msg, size_t msgSize, void *___id)
+void const* ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginDocument(struct jsontree_value *pDocumentModel, IJSONDocumentIOHandler__idata_t *documentIOHandler, void *pUserData, char *msg, size_t msgSize, void *___id)
 {
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (msg == NULL) 
   {
-    os_printf("JSON message buffer must not be NULL\n");
+    os_printf("JSON message buffer must not be NULL\r\n");
     return NULL;
   }
   JSONSerializeCtx_t *pSerializeCtx = JSONProcessorImpl_newJSONSerializeCtx(msg, msgSize, ___cid);
@@ -152,12 +152,12 @@ const void* ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginDocument(str
   return pSerializeCtx;
 }
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginObject(const void* hDocument, char const *path, void *___id)
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginObject(void const* hDocument, char const *path, void *___id)
 {
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (hDocument == NULL) 
   {
-    os_printf("JSON document handle must not be NULL\n");
+    os_printf("JSON document handle must not be NULL\r\n");
     return false;
   }
   JSONSerializeCtx_t *pSerializeCtx = ((JSONSerializeCtx_t *) hDocument);
@@ -171,12 +171,12 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_beginObject(const void* 
   return true;
 }
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_addValue(const void* hDocument, char const *path, JSONObjectSerializationMode_t mode, void *___id)
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_addValue(void const* hDocument, char const *path, JSONObjectSerializationMode_t mode, void *___id)
 {
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (hDocument == NULL) 
   {
-    os_printf("JSON document handle must not be NULL\n");
+    os_printf("JSON document handle must not be NULL\r\n");
     return false;
   }
   JSONSerializeCtx_t *pSerializeCtx = ((JSONSerializeCtx_t *) hDocument);
@@ -195,12 +195,12 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_addValue(const void* hDo
   return true;
 }
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endObject(const void* hDocument, void *___id)
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endObject(void const* hDocument, void *___id)
 {
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (hDocument == NULL) 
   {
-    os_printf("JSON document handle must not be NULL\n");
+    os_printf("JSON document handle must not be NULL\r\n");
     return false;
   }
   JSONSerializeCtx_t *pSerializeCtx = ((JSONSerializeCtx_t *) hDocument);
@@ -214,12 +214,12 @@ bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endObject(const void* hD
   return true;
 }
 
-bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endDocument(const void* hDocument, void *___id)
+bool ICACHE_FLASH_ATTR JSONProcessorImpl_jsonSerializer_endDocument(void const* hDocument, void *___id)
 {
   JSONProcessorImpl__cdata_t *___cid = ((JSONProcessorImpl__cdata_t *) ___id);
   if (hDocument == NULL) 
   {
-    os_printf("JSON document handle must not be NULL\n");
+    os_printf("JSON document handle must not be NULL\r\n");
     return false;
   }
   JSONSerializeCtx_t *pSerializeCtx = ((JSONSerializeCtx_t *) hDocument);

@@ -65,7 +65,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_deleteAWSIoTData(AWSIoT
   pSessionData->busy = false;
 }
 
-bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report(const void* hSession, char *jsonString, void *___id)
+bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report(void const* hSession, char *jsonString, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -111,7 +111,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_report(cons
   return true;
 }
 
-bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const void* hSession, void *___id)
+bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -155,7 +155,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_get(const v
   return true;
 }
 
-bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_isConnected(const void* hSession, void *___id)
+bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_isConnected(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -167,7 +167,7 @@ bool ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_isConnected
   return (*___cid->mqttClient__ops->isConnected)(pSessionData->hDownstreamSession, ___cid->mqttClient__ops->__instance);
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_disconnect(const void* hSession, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_disconnect(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -178,7 +178,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_disconnect(
   (*___cid->mqttClient__ops->disconnect)(pSessionData->hDownstreamSession, ___cid->mqttClient__ops->__instance);
 }
 
-void *ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_getUserData(const void* hSession, void *___id)
+void *ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_getUserData(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *) hSession);
@@ -189,7 +189,7 @@ void *ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_thingShadow_getUserDat
   return pSessionData->pUserData;
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_connected(const void* hSession, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_connected(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *)((*___cid->mqttClient__ops->getUserData)(hSession, ___cid->mqttClient__ops->__instance)));
@@ -198,7 +198,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
     return;
   }
   
-  os_printf("Subscribing to AWS IoT Thing Shadow topics...\n");
+  os_printf("Subscribing to AWS IoT Thing Shadow topics...\r\n");
   
   char updateAcceptedTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
   char updateRejectedTopicName[MAX_AWS_IOT_THING_SHADOW_TOPIC_NAME_LENGTH + 1] = { 0 };
@@ -227,7 +227,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_conne
   }
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_subscribed(const void* hSession, uint16_t subMsgId, MQTTQoS_t grantedQoS[], void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_subscribed(void const* hSession, uint16_t subMsgId, MQTTQoS_t grantedQoS[], void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *)((*___cid->mqttClient__ops->getUserData)(hSession, ___cid->mqttClient__ops->__instance)));
@@ -259,12 +259,12 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_subsc
   }
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_published(const void* hSession, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_published(void const* hSession, void *___id)
 {
   
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_publishMessageReceived(const void* hSession, char *topicName, size_t topicNameLen, Datagram_t *pDatagram, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_publishMessageReceived(void const* hSession, char *topicName, size_t topicNameLen, Datagram_t *pDatagram, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *)((*___cid->mqttClient__ops->getUserData)(hSession, ___cid->mqttClient__ops->__instance)));
@@ -318,7 +318,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_publi
   }
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_disconnected(const void* hSession, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_disconnected(void const* hSession, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *)((*___cid->mqttClient__ops->getUserData)(hSession, ___cid->mqttClient__ops->__instance)));
@@ -336,7 +336,7 @@ void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_disco
   AbstractAWSIoTMQTTThingShadowImpl_deleteAWSIoTData(pSessionData, ___cid);
 }
 
-void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_connectionError(const void* hSession, MQTTError_t error, void *___id)
+void ICACHE_FLASH_ATTR AbstractAWSIoTMQTTThingShadowImpl_mqttClientHandler_connectionError(void const* hSession, MQTTError_t error, void *___id)
 {
   AbstractAWSIoTMQTTThingShadowImpl__cdata_t *___cid = ((AbstractAWSIoTMQTTThingShadowImpl__cdata_t *) ___id);
   AWSIoTSessionData_t *pSessionData = ((AWSIoTSessionData_t *)((*___cid->mqttClient__ops->getUserData)(hSession, ___cid->mqttClient__ops->__instance)));

@@ -116,7 +116,7 @@ make flash SDK_HOME=<ESP8266 NONOS SDK install/checkout location> ESPTOOL_COM_PO
 
 ![](simple-1.png "Start of initial firmware version")
 
-<p style="margin-left: 2em">Also have a look at the red LED next to the USB port on your board (GPIO #0). It should blink with a period of approx. 1 s.</p> 
+<p style="margin-left: 2em">Also have a look at the red LED (<code>GPIO #0</code>) next to the USB port on your board. It should blink with a period of approx. 1 s.</p> 
 
 ### Create and upload a new firmware version to FotaHub
 

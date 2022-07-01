@@ -167,7 +167,7 @@ static bool ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine__execute(DemoFOTAUpda
             /* 
              * transition actions
              */
-            os_printf("Cannot handle firmware over-the-air update request (missing network connection)\n");
+            os_printf("Cannot handle firmware over-the-air update request (missing network connection)\r\n");
             
             /* 
              * enter target state
@@ -249,7 +249,7 @@ static bool ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine__execute(DemoFOTAUpda
               /* 
                * transition actions
                */
-              os_printf("Ignoring firmware over-the-air update request to version %s as this version is already running\n", (*((char **)((arguments[0])))));
+              os_printf("Ignoring firmware over-the-air update request to version %s as this version is already running\r\n", (*((char **)((arguments[0])))));
               
               /* 
                * enter target state
@@ -569,10 +569,10 @@ static bool ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine__execute(DemoFOTAUpda
 
 static inline void ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine_connected_EntryAction(DemoFOTAUpdateWorkflowEngine__data_t *instance)
 {
-  os_printf("Ready for firmware over-the-air update\n");
+  os_printf("Ready for firmware over-the-air update\r\n");
 }
 
 static inline void ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine_restarting_EntryAction(DemoFOTAUpdateWorkflowEngine__data_t *instance)
 {
-  os_printf("Waiting for restart\n");
+  os_printf("Waiting for restart\r\n");
 }

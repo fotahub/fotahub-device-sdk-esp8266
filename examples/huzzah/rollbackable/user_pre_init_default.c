@@ -89,7 +89,7 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
   enum flash_size_map flashSizeMap = system_get_flash_size_map();
   if (flashSizeMap < 2) 
   {
-    os_printf("The flash map is not supported\n");
+    os_printf("The flash map is not supported\r\n");
     while (true)
     {
     }
@@ -99,7 +99,7 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
   
   if (!system_partition_table_regist(partitionTable, sizeof(partitionTable) / sizeof(partitionTable[0]), flashSizeMap)) 
   {
-    os_printf("system_partition_table_regist fail\n");
+    os_printf("system_partition_table_regist fail\r\n");
     while (true)
     {
     }
