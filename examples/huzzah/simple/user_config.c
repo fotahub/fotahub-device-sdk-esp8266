@@ -26,8 +26,6 @@ FOTAUpdateClientConfig_t ESP8266_FOTA_UPDATE_CLIENT_CONFIG =
   .authenticateUpdateServer = true
 };
 
-ICACHE_RODATA_ATTR
-char const WIFI_STATION_SSID[] = "<Your Wi-Fi SSID>";
+ICACHE_RODATA_ATTR char const WIFI_STATION_SSID[] = "<Your Wi-Fi SSID>";
 
-ICACHE_RODATA_ATTR
-char const WIFI_STATION_PASSWORD[] = "<Your Wi-Fi password>";
+ICACHE_RODATA_ATTR char const WIFI_STATION_PASSWORD[] = "<Your Wi-Fi password>";

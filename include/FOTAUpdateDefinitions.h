@@ -82,8 +82,7 @@ typedef struct FirmwareUpdateInfo FirmwareUpdateInfo_t;
 
 extern size_t ICACHE_FLASH_ATTR getVerificationDataSize(FOTAUpdateVerificationAlgorithm_t algorithm);
 
-ICACHE_RODATA_ATTR
-extern FOTAUpdateClientConfig_t const FOTA_UPDATE_CLIENT_DEFAULT_CONFIG;
+extern ICACHE_RODATA_ATTR FOTAUpdateClientConfig_t const FOTA_UPDATE_CLIENT_DEFAULT_CONFIG;
 
 #ifdef __cplusplus
 } /* extern "C" */

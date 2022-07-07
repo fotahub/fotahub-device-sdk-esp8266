@@ -17,5 +17,4 @@
  */
 #include "JSONDefinitions.h"
 
-ICACHE_RODATA_ATTR
-char const JSON_OBJECT_PATH_SEPARATOR[] = "/";
+ICACHE_RODATA_ATTR char const JSON_OBJECT_PATH_SEPARATOR[] = "/";

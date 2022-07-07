@@ -33,8 +33,7 @@ enum JSONObjectSerializationMode {
 };
 typedef enum JSONObjectSerializationMode JSONObjectSerializationMode_t;
 
-ICACHE_RODATA_ATTR
-extern char const JSON_OBJECT_PATH_SEPARATOR[];
+extern ICACHE_RODATA_ATTR char const JSON_OBJECT_PATH_SEPARATOR[];
 
 #ifdef __cplusplus
 } /* extern "C" */

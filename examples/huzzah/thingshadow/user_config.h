@@ -39,11 +39,9 @@ extern "C" {
 
 extern FOTAUpdateClientConfig_t ESP8266_FOTA_UPDATE_CLIENT_CONFIG;
 
-ICACHE_RODATA_ATTR
-extern char const WIFI_STATION_SSID[];
+extern ICACHE_RODATA_ATTR char const WIFI_STATION_SSID[];
 
-ICACHE_RODATA_ATTR
-extern char const WIFI_STATION_PASSWORD[];
+extern ICACHE_RODATA_ATTR char const WIFI_STATION_PASSWORD[];
 
 #ifdef __cplusplus
 } /* extern "C" */
