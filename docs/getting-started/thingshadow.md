@@ -143,6 +143,7 @@ mind
 ```
 **Linux/Mac OS X:**   
 ```sh
+chmod +x mind.sh
 ./mind.sh
 ```
 <p style="margin-left: 2em">If you have installed the ESP8266 NONOS SDK and ESP8266 toolchain directly on your machine, you can invoke <code>make</code> right away but must indicate the ESP8266 NONOS SDK install or checkout location by setting the <code>SDK_HOME</code> variable. Be sure that this location does not contain any spaces in its path and specify it as <a href="https://cygwin.com/cygwin-ug-net/using.html#using-pathnames">Cygwin POSIX-style path name</a> when working under Windows (e.g., <code>/c/Git/ESP8266_NONOS_SDK</code> instead of <code>C:\Git\ESP8266_NONOS_SDK</code>):</p> 
