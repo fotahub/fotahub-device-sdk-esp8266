@@ -6,11 +6,11 @@ The build environment for ESP8266 consists of three parts: the [ESP8266 NONOS SD
 
 1. Clone the [ESP8266 NONOS SDK](https://github.com/espressif/ESP8266_NONOS_SDK) repository and checkout the **v3.0.4** tag, or download the corresponding [ZIP archive](https://github.com/espressif/ESP8266_NONOS_SDK/archive/refs/tags/v3.0.4.zip) and uncompress it to a location of your choice.
 
-> &#x26A0; Make sure that the path to the location of the ESP8266 NONOS SDK on your machine does not contain any spaces.
+    > &#x26A0; Make sure that the path to the location of the ESP8266 NONOS SDK on your machine does not contain any spaces.
 
 2. Apply the ESP8266 NONOS SDK patches provided along with the FotaHub Device SDK for ESP8266 by copying all content of the `fotahub-device-sdk-esp8266/third-party/esp8266-nonos-sdk-patches` folder over the location where your have installed the original version of the ESP8266 NONOS SDK.
  
-> &#x1F6C8; The ESP8266 NONOS SDK patches enable ESP8266 application code to be compiled as C99, and provide enhancements for mbed TLS and the UART driver library module.
+    > &#x1F6C8; The ESP8266 NONOS SDK patches enable ESP8266 application code to be compiled as C99, and provide enhancements for mbed TLS and the UART driver library module.
   
 ## Installation of ESP8266 toolchain
 
