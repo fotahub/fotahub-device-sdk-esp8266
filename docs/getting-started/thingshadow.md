@@ -48,7 +48,7 @@ For obvious reasons, the ultimately required self test logic depends heavily on 
 
 ## Supported targets
 
-The Simple example can be used as is with the [Adafruit Feather HUZZAH](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266) board. With some adaptations, it can also be used with any other ESP8266 development board or hardware product. 
+The Thing Shadow example can be used as is with the [Adafruit Feather HUZZAH](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266) board. With some adaptations, it can also be used with any other ESP8266 development board or hardware product. 
 
 ## Installation
 
@@ -182,11 +182,11 @@ If not yet done so, either clone or download and uncompress the [FotaHub Device 
 
     Also have a look at the red LED (<code>GPIO #0</code>) next to the USB port on your board. It should blink with a period of approx. 1 s.
 
-5. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and visit the unnamed classic shadow of your AWS IoT thing (`Manage` > `Things` > `{{Your AWS IoT thing}}` > `Device Shadows` > `Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Click on the refresh button if no such is displayed. You should see that yields a shadow state document with a `currentVersion` attribute that indicates the currently running firmware version on your board:
+5. Go back to the [AWS IoT Console](https://console.aws.amazon.com/iot/home) and visit the unnamed classic shadow of your AWS IoT thing (`Manage` > `Things` > `{{Your AWS IoT thing}}` > `Device Shadows` > `Classic Shadow` when using the *New console experience* which can be activated all down in the left side bar). Click on the refresh button if no such is displayed yet. You should see that it yields a shadow state document with a `currentVersion` attribute that indicates the currently running firmware version on your board:
 
     ![](thingshadow-2.png "Initial thing shadow state")
 
-6. Stop your serial monitor app and disconnect your board from your laptop or computer. Use a USB wall charger to power it instead. Feel free to move your board to a different place if you like.  
+6. Stop your serial monitor app and disconnect your board from your laptop or computer. Use a USB wall charger to power it instead. Feel free to move your board to another place somewhere away from your laptop or computer if you like.
 
 ### Create and upload a new firmware version to FotaHub
 
@@ -238,7 +238,7 @@ You can perfom cloud-triggered firmare over-the-air updates either [interactivel
    
     ![](thingshadow-3.png "Thing shadow state after successful FOTA update")
 
-    In case the built-in self test fails, the new fimware version initiates the reversion of the firmware update, the board is restarted another time, and the previous firmware version is resumed. You can see that
+    In case the built-in self test fails, the new fimware version initiates a rollback of the firmware update, the board is restarted another time, and the previous firmware version is resumed. You can see that
     * by observing the **red LED** on your board - it should continue to blink with the same frequency as before
     * by inspecting the **shadow state document** in the AWS IoT Console - it should reflect the initial firmware version as the currently running version and include an `updateStatus` attribute indicating the failure of the firmware over-the-air update:
 
@@ -278,7 +278,7 @@ You can perfom cloud-triggered firmare over-the-air updates either [interactivel
     {"state":{"reported":{"currentVersion":"1.1","updateStatus":"succeeded"}},"metadata":{...},"version":...,"timestamp":...}
     ```
 
-    In case the built-in self test fails, the new fimware version initiates the reversion of the firmware update, the board is restarted another time, and the previous firmware version is resumed. You can see that
+    In case the built-in self test fails, the new fimware version initiates a rollback of the firmware update, the board is restarted another time, and the previous firmware version is resumed. You can see that
     * by observing the **red LED** on your board - it should continue to blink with the same frequency as before
     * by inspecting the **shadow state document** retrieved as per above - it should reflect the initial firmware version as the currently running version and include an `updateStatus` attribute indicating the failure of the firmware over-the-air update:
 
