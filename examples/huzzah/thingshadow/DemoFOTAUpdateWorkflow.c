@@ -364,7 +364,7 @@ static bool ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine__execute(DemoFOTAUpda
               /* 
                * transition actions
                */
-              validateFirmwareUpdateApplying();
+              validateFirmwareUpdate();
               
               if (instance->__currentState == DemoFOTAUpdateWorkflowEngine_applying__state) 
               {
@@ -524,7 +524,7 @@ static bool ICACHE_FLASH_ATTR DemoFOTAUpdateWorkflowEngine__execute(DemoFOTAUpda
               /* 
                * transition actions
                */
-              validateFirmwareUpdateRollingback();
+              validateFirmwareRollback();
               
               if (instance->__currentState == DemoFOTAUpdateWorkflowEngine_rollingBack__state) 
               {

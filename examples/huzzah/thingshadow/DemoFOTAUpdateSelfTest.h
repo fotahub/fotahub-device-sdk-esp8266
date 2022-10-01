@@ -28,13 +28,13 @@
 extern "C" {
 #endif
 
-#define SIMULATED_APPLYING_SUCCESS_RATE 70
+#define SIMULATED_FOTA_UPDATE_VALIDATION_SUCCESS_RATE 70
 
 void ICACHE_FLASH_ATTR fotaUpdateSelfTest_init(void);
 
-void ICACHE_FLASH_ATTR validateFirmwareUpdateApplying(void);
+void ICACHE_FLASH_ATTR validateFirmwareUpdate(void);
 
-void ICACHE_FLASH_ATTR validateFirmwareUpdateRollingback(void);
+void ICACHE_FLASH_ATTR validateFirmwareRollback(void);
 
 #ifdef __cplusplus
 } /* extern "C" */

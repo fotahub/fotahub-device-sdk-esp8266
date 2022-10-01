@@ -39,25 +39,25 @@ static bool ICACHE_FLASH_ATTR runRandomSelfTest(uint8_t successRate)
   return true;
 }
 
-void ICACHE_FLASH_ATTR validateFirmwareUpdateApplying(void)
+void ICACHE_FLASH_ATTR validateFirmwareUpdate(void)
 {
   os_printf("Validating firmware update\r\n");
   /* 
    * Perform any sort of tests and checks to see if device behaves as expected after firmware over-the-air update
    */
-  if (runRandomSelfTest(SIMULATED_APPLYING_SUCCESS_RATE)) 
+  if (runRandomSelfTest(SIMULATED_FOTA_UPDATE_VALIDATION_SUCCESS_RATE)) 
   {
     os_printf("Firmware update successfully applied\r\n");
     fotahub_onFirmwareUpdateStatusChanged(FOTA_UPDATE_STATUS_APPLICATION_SUCCEEDED);
   }
   else
   {
-    os_printf("Firmware update applying failed\r\n");
+    os_printf("Updated firmware does not behave as expected\r\n");
     fotahub_onFirmwareUpdateStatusChanged(FOTA_UPDATE_STATUS_APPLICATION_FAILED);
   }
 }
 
-void ICACHE_FLASH_ATTR validateFirmwareUpdateRollingback(void)
+void ICACHE_FLASH_ATTR validateFirmwareRollback(void)
 {
   os_printf("Validating previous firmware\r\n");
   os_printf("Firmware update successfully rolled back\r\n");
